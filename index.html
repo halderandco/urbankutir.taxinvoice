@@ -477,7 +477,6 @@
             border-top: 1px solid var(--light-accent);
         }
         
-        /* Watermark using the same logo image */
         .watermark {
             position: absolute;
             top: 50%;
@@ -728,7 +727,6 @@
                 display: none;
             }
             
-            /* Improve print layout */
             .invoice-table {
                 font-size: 11pt;
             }
@@ -738,7 +736,6 @@
             }
         }
         
-        /* Compact spacing for better density */
         .compact-spacing {
             margin-bottom: 14px;
         }
@@ -751,7 +748,6 @@
             padding: 18px;
         }
         
-        /* Elegant font refinements */
         h1, h2, h3, h4, .invoice-title, .panel-title {
             letter-spacing: -0.1px;
         }
@@ -760,12 +756,10 @@
             letter-spacing: 0.2px;
         }
         
-        /* Subtle animations */
         .btn, input, textarea, select, .item-action-btn, .add-item-btn {
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
-        /* Focus states */
         .btn:focus, input:focus, textarea:focus, select:focus {
             outline: none;
             box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.15);
@@ -807,7 +801,6 @@
             </div>
         </header>
         
-        <!-- Mobile controls -->
         <div class="mobile-controls">
             <button class="btn btn-secondary mobile-btn" id="generatePdfMobile">
                 <i class="fas fa-file-pdf"></i> PDF
@@ -897,7 +890,6 @@
                                 </tr>
                             </thead>
                             <tbody id="itemsContainer">
-                                <!-- Items will be added dynamically here -->
                             </tbody>
                         </table>
                     </div>
@@ -936,7 +928,7 @@
                 <div class="watermark"></div>
                 
                 <div class="print-only">
-                    <p>Generated from Urban Kutir Professional Invoice System | www.urbankutir.com</p>
+                    <p>Generated from Urban Kutir Professional Invoice System</p>
                 </div>
                 
                 <div class="invoice-header">
@@ -1054,28 +1046,24 @@
         </div>
         
         <footer>
-            <p>Urban Kutir Professional Invoice System &copy; 2025 | GST No: 19AAHFU6863E1ZR | www.urbankutir.com</p>
+            <p>Urban Kutir Professional Invoice System &copy; 2025 | GST No: 19AAHFU6863E1ZR</p>
         </footer>
     </div>
     
-    <!-- Include jsPDF and html2canvas libraries for PDF generation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Set default date to today
             const today = new Date();
             const formattedToday = today.toISOString().split('T')[0];
             document.getElementById('invoiceDate').value = formattedToday;
             
-            // Set due date to 15 days from today
             const dueDate = new Date(today);
             dueDate.setDate(today.getDate() + 15);
             const formattedDueDate = dueDate.toISOString().split('T')[0];
             document.getElementById('dueDate').value = formattedDueDate;
             
-            // Initialize items with one empty item
             let items = [
                 { 
                     slNo: 1, 
@@ -1088,7 +1076,6 @@
                 }
             ];
             
-            // Initialize DOM elements
             const itemsContainer = document.getElementById('itemsContainer');
             const previewItems = document.getElementById('previewItems');
             const addItemBtn = document.getElementById('addItemBtn');
@@ -1098,20 +1085,16 @@
             const resetFormBtn = document.getElementById('resetForm');
             const clientGstInput = document.getElementById('clientGst');
             
-            // Mobile buttons
             const printInvoiceBtnMobile = document.getElementById('printInvoiceMobile');
             const generatePdfBtnMobile = document.getElementById('generatePdfMobile');
             const resetFormBtnMobile = document.getElementById('resetFormMobile');
             
-            // Preload watermark image
             function preloadWatermark() {
                 const watermark = document.querySelector('.watermark');
                 const logoImg = document.querySelector('.logo-img');
                 if (logoImg.complete && logoImg.naturalWidth !== 0) {
-                    // Logo loaded successfully
                     watermark.style.backgroundImage = `url('${logoImg.src}')`;
                 } else {
-                    // Use fallback if logo fails to load
                     logoImg.onload = function() {
                         watermark.style.backgroundImage = `url('${logoImg.src}')`;
                     };
@@ -1122,10 +1105,8 @@
                 }
             }
             
-            // Call preload function
             setTimeout(preloadWatermark, 500);
             
-            // Render items in editor
             function renderItems() {
                 itemsContainer.innerHTML = '';
                 
@@ -1148,13 +1129,11 @@
                     itemsContainer.appendChild(row);
                 });
                 
-                // Add event listeners to delete buttons
                 document.querySelectorAll('.item-action-btn').forEach(button => {
                     button.addEventListener('click', function() {
                         const index = parseInt(this.getAttribute('data-index'));
                         if (items.length > 1) {
                             items.splice(index, 1);
-                            // Update SL numbers
                             items.forEach((item, idx) => item.slNo = idx + 1);
                             renderItems();
                             updatePreview();
@@ -1162,7 +1141,6 @@
                     });
                 });
                 
-                // Add event listeners to qty and price inputs for auto-calculation
                 document.querySelectorAll('.item-qty, .item-price').forEach(input => {
                     input.addEventListener('input', function() {
                         const row = this.closest('tr');
@@ -1171,23 +1149,19 @@
                         const total = qty * price;
                         row.querySelector('.item-total').value = formatCurrency(total, true);
                         
-                        // Update the items array
                         const sno = parseInt(row.querySelector('.item-sno').value) - 1;
                         items[sno].qty = qty;
                         items[sno].price = price;
                         items[sno].total = total;
                         
-                        // Update item name and HSN if changed
                         items[sno].name = row.querySelector('.item-name').value;
                         items[sno].hsnCode = row.querySelector('.item-hsn').value;
                         items[sno].unit = row.querySelector('.item-unit').value;
                         
-                        // Auto-update preview
                         updatePreview();
                     });
                 });
                 
-                // Add event listeners to other inputs
                 document.querySelectorAll('.item-name, .item-hsn, .item-unit').forEach(input => {
                     input.addEventListener('input', function() {
                         const row = this.closest('tr');
@@ -1201,17 +1175,14 @@
                             items[sno].unit = this.value;
                         }
                         
-                        // Auto-update preview
                         updatePreview();
                     });
                 });
             }
             
-            // Render items in preview
             function renderPreviewItems() {
                 previewItems.innerHTML = '';
                 
-                // Check if we have any items with actual data
                 const hasItems = items.some(item => item.name.trim() !== '' || item.total > 0);
                 
                 if (!hasItems) {
@@ -1240,7 +1211,6 @@
                 });
             }
             
-            // Format currency with commas and decimals
             function formatCurrency(amount, withDecimals = false) {
                 if (withDecimals) {
                     return amount.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2});
@@ -1248,7 +1218,6 @@
                 return amount.toLocaleString('en-IN');
             }
             
-            // Convert number to words for amount in words
             function numberToWords(num) {
                 if (num === 0) return 'ZERO';
                 
@@ -1297,9 +1266,7 @@
                 return words.trim() || 'ZERO';
             }
             
-            // Update preview with form values
             function updatePreview() {
-                // Update basic information
                 const invoiceNo = document.getElementById('invoiceNo').value;
                 document.getElementById('previewInvoiceNo').textContent = invoiceNo || '[Invoice Number]';
                 document.getElementById('previewInvoiceNo').className = invoiceNo ? '' : 'empty-state';
@@ -1312,7 +1279,6 @@
                 document.getElementById('previewDueDate').textContent = dueDate ? formatDate(dueDate) : '[Due Date]';
                 document.getElementById('previewDueDate').className = dueDate ? '' : 'empty-state';
                 
-                // Update client information
                 const clientName = document.getElementById('clientName').value;
                 const clientAddress = document.getElementById('clientAddress').value;
                 const clientGst = document.getElementById('clientGst').value;
@@ -1335,13 +1301,11 @@
                             <strong>GSTIN:</strong> <span id="previewClientGstNumber">${clientGst}</span>
                         </div>` : '');
                     
-                    // Remove empty state class
                     document.getElementById('previewClient').querySelectorAll('.empty-state').forEach(el => el.remove());
                 } else {
                     document.getElementById('previewClient').innerHTML = '<div class="empty-state">[Client Information]</div>';
                 }
                 
-                // Update delivery information
                 const deliveryAddress = document.getElementById('deliveryAddress').value;
                 const phoneNumber = document.getElementById('phoneNumber').value;
                 
@@ -1356,17 +1320,14 @@
                     document.getElementById('previewDelivery').innerHTML = '<div class="empty-state">[Delivery Address]</div>';
                 }
                 
-                // Update items
                 renderPreviewItems();
                 
-                // Calculate totals
                 const taxableValue = items.reduce((sum, item) => sum + item.total, 0);
                 const taxRate = parseFloat(document.getElementById('taxRate').value) || 0;
                 const taxAmount = (taxableValue * taxRate) / 100;
                 const roundOff = parseFloat(document.getElementById('roundOff').value) || 0;
                 const totalAmount = taxableValue + (taxAmount * 2) + roundOff;
                 
-                // Update summary
                 document.getElementById('previewTaxable').textContent = formatCurrency(taxableValue, true);
                 document.getElementById('previewTaxRate').textContent = taxRate;
                 document.getElementById('previewSgstRate').textContent = taxRate;
@@ -1375,12 +1336,10 @@
                 document.getElementById('previewRoundOff').textContent = formatCurrency(roundOff, true);
                 document.getElementById('previewTotal').textContent = '₹' + formatCurrency(totalAmount, true);
                 
-                // Update amount in words
                 const amountWords = numberToWords(Math.round(totalAmount));
                 document.getElementById('previewAmountWords').textContent = totalAmount > 0 ? amountWords : '[Amount in words]';
                 document.getElementById('previewAmountWords').className = totalAmount > 0 ? '' : 'empty-state';
                 
-                // Update notes
                 const notes = document.getElementById('notes').value;
                 const notesContainer = document.getElementById('previewNotes');
                 const notesContent = document.getElementById('previewNotesContent');
@@ -1393,7 +1352,6 @@
                 }
             }
             
-            // Format date from YYYY-MM-DD to DD/MM/YYYY
             function formatDate(dateString) {
                 if (!dateString) return '';
                 const date = new Date(dateString);
@@ -1403,7 +1361,6 @@
                 return `${day}/${month}/${year}`;
             }
             
-            // Add new item
             addItemBtn.addEventListener('click', function() {
                 const newSlNo = items.length + 1;
                 items.push({
@@ -1419,21 +1376,17 @@
                 updatePreview();
             });
             
-            // Update invoice preview
             updateInvoiceBtn.addEventListener('click', updatePreview);
             
-            // Print invoice function
             function printInvoice() {
                 window.print();
             }
             
-            // Generate PDF function
             function generatePdf() {
                 const { jsPDF } = window.jspdf;
                 const doc = new jsPDF('p', 'pt', 'a4');
                 const invoiceElement = document.querySelector('.preview-panel');
                 
-                // Show loading state
                 const originalText = generatePdfBtn.innerHTML;
                 const originalTextMobile = generatePdfBtnMobile.innerHTML;
                 generatePdfBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
@@ -1448,14 +1401,13 @@
                     backgroundColor: '#ffffff'
                 }).then(canvas => {
                     const imgData = canvas.toDataURL('image/png');
-                    const imgWidth = 595; // A4 width in pts
+                    const imgWidth = 595;
                     const imgHeight = (canvas.height * imgWidth) / canvas.width;
                     
                     doc.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
                     const invoiceNo = document.getElementById('invoiceNo').value || 'Draft';
                     doc.save(`UrbanKutir_Invoice_${invoiceNo}.pdf`);
                     
-                    // Reset button state
                     generatePdfBtn.innerHTML = originalText;
                     generatePdfBtnMobile.innerHTML = originalTextMobile;
                     generatePdfBtn.disabled = false;
@@ -1470,10 +1422,8 @@
                 });
             }
             
-            // Reset form function
             function resetForm() {
                 if (confirm('Are you sure you want to reset the form? All data will be cleared.')) {
-                    // Reset form fields to empty
                     document.getElementById('invoiceNo').value = '';
                     document.getElementById('invoiceDate').value = formattedToday;
                     document.getElementById('dueDate').value = formattedDueDate;
@@ -1487,7 +1437,6 @@
                     document.getElementById('roundOff').value = '0';
                     document.getElementById('notes').value = '';
                     
-                    // Reset items to one empty item
                     items = [
                         { 
                             slNo: 1, 
@@ -1505,7 +1454,6 @@
                 }
             }
             
-            // Add event listeners to buttons
             printInvoiceBtn.addEventListener('click', printInvoice);
             printInvoiceBtnMobile.addEventListener('click', printInvoice);
             
@@ -1515,11 +1463,9 @@
             resetFormBtn.addEventListener('click', resetForm);
             resetFormBtnMobile.addEventListener('click', resetForm);
             
-            // Initialize the invoice
             renderItems();
             updatePreview();
             
-            // Auto-update on input changes
             document.getElementById('invoiceNo').addEventListener('input', updatePreview);
             document.getElementById('invoiceDate').addEventListener('input', updatePreview);
             document.getElementById('dueDate').addEventListener('input', updatePreview);
@@ -1534,4 +1480,4 @@
         });
     </script>
 </body>
-</html>
+                                                                                                                      </html>
