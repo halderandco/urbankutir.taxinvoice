@@ -1076,7 +1076,7 @@
                     <div style="display: flex; align-items: center; gap: 15px;">
                         <div style="width: 70px; height: 70px; overflow: hidden; flex-shrink: 0;">
                             <img src="urbankutir.png" alt="Urban Kutir Logo" style="width: 100%; height: 100%; object-fit: contain;"
-                                 onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNzAiIGhlaWdodD0iNzAiIHZpZXdCb3g9IjAgMCA3MCA3MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjcwIiBoZWlnaHQ9IjcwIiByeD0iNiIgZmlsbD0idXJsKCNwYWludDBfbGluZWFyKSIvPgo8dGV4dCB4PSIzNSIgeT0iMzgiIGZvbnQtZmFtaWx5PSJJbnRlciIgZm9udC1zaXplPSIxNCIgZm9udC13ZWlnaHQ9ImJvbGQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiNmZmZmZmYiPlVLIC0gSW52b2ljZTwvdGV4dD4KPGRlZnM+CjxsaW5lYXJHcmFkaWVudCBpZD0icGFpbnQwX2xpbmVhciIgeDE9IjM1IiB5MT0iMCIgeDI9IjM1IiB5Mj0iNzAiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KPHN0b3Agc3RvcC1jb2xvcj0iIzhCNDUxMyIvPgo8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNBNjgzMkQiLz4KPC9saW5lYXJHcmFkaWVudD4KPC9kZWZzPgo8L3N2Zz4K'">
+                                 onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNzAiIGhlaWdodD0iNzAiIHZpZXdCb3g9IjAgMCA3MCA3MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjcwIiBoZWlnaHQ9IjcwIiByeD0iNiIgZmlsbD0idXJsKCNwYWludDBfbGluZWFyKSIvPgo8dGV4dCB4PSIzNSIgeT0iMzgiIGZvbnQtZmFtaWx5PSJJbnRlciIgZm9udC1zaXplPSIxNCIgZm9udC13ZWlnaHQ9ImJvbGQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiNmZmZmZmYiPlVLCjwvdGV4dD4KPGRlZnM+CjxsaW5lYXJHcmFkaWVudCBpZD0icGFpbnQwX2xpbmVhciIgeDE9IjM1IiB5MT0iMCIgeDI9IjM1IiB5Mj0iNzAiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KPHN0b3Agc3RvcC1jb2xvcj0iIzhCNDUxMyIvPgo8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNBNjgzMkQiLz4KPC9saW5lYXJHcmFkaWVudD4KPC9kZWZzPgo8L3N2Zz4K'">
                         </div>
                         <div>
                             <h1 style="color: var(--primary-dark); font-size: 24px; margin: 0 0 3px 0; font-weight: 700;">Urban Kutir</h1>
@@ -1628,51 +1628,47 @@
             function printInvoice() {
                 updatePrintTemplate();
                 
-                // Show the print template temporarily
-                const printTemplate = document.getElementById('invoicePrintTemplate');
-                printTemplate.style.display = 'block';
-                
-                // Store original body content and classes
-                const originalBody = document.body.innerHTML;
-                const originalBodyClasses = document.body.className;
-                
-                // Replace body with just the print template
-                document.body.innerHTML = printTemplate.outerHTML;
-                document.body.style.margin = '0';
-                document.body.style.padding = '0';
-                
-                // Add print-specific styles
-                const style = document.createElement('style');
-                style.innerHTML = `
-                    @media print {
-                        @page {
-                            size: A4;
-                            margin: 20mm;
-                        }
-                        body {
-                            margin: 0;
-                            padding: 0;
-                            width: 210mm;
-                            min-height: 297mm;
-                        }
-                    }
-                    body {
-                        font-family: 'Inter', sans-serif;
-                        margin: 0;
-                        padding: 0;
-                    }
-                `;
-                document.head.appendChild(style);
-                
-                // Trigger print
-                window.print();
-                
-                // Restore original content
-                document.body.innerHTML = originalBody;
-                document.body.className = originalBodyClasses;
-                
-                // Reinitialize event listeners
-                initializeEventListeners();
+                const printWindow = window.open('', '_blank');
+                printWindow.document.write(`
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <title>Urban Kutir - Invoice ${document.getElementById('invoiceNo').value || 'Draft'}</title>
+                        <style>
+                            @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+                            * {
+                                font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                                margin: 0;
+                                padding: 0;
+                                box-sizing: border-box;
+                            }
+                            body {
+                                width: 210mm;
+                                min-height: 297mm;
+                                padding: 20mm;
+                                background: white;
+                                margin: 0;
+                            }
+                            @page {
+                                size: A4;
+                                margin: 20mm;
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        ${document.getElementById('invoicePrintTemplate').outerHTML}
+                        <script>
+                            window.onload = function() {
+                                window.print();
+                                setTimeout(function() {
+                                    window.close();
+                                }, 100);
+                            };
+                        <\/script>
+                    </body>
+                    </html>
+                `);
+                printWindow.document.close();
             }
             
             function generatePdf() {
@@ -1760,50 +1756,30 @@
                 }
             }
             
-            function initializeEventListeners() {
-                printInvoiceBtn.addEventListener('click', printInvoice);
-                printInvoiceBtnMobile.addEventListener('click', printInvoice);
-                
-                generatePdfBtn.addEventListener('click', generatePdf);
-                generatePdfBtnMobile.addEventListener('click', generatePdf);
-                
-                resetFormBtn.addEventListener('click', resetForm);
-                resetFormBtnMobile.addEventListener('click', resetForm);
-                
-                updateInvoiceBtn.addEventListener('click', updatePreview);
-                addItemBtn.addEventListener('click', function() {
-                    const newSlNo = items.length + 1;
-                    items.push({
-                        slNo: newSlNo,
-                        name: "",
-                        hsnCode: "",
-                        qty: 1,
-                        price: 0,
-                        unit: "Pcs",
-                        total: 0
-                    });
-                    renderItems();
-                    updatePreview();
-                });
-                
-                // Reattach input event listeners
-                document.getElementById('invoiceNo').addEventListener('input', updatePreview);
-                document.getElementById('invoiceDate').addEventListener('input', updatePreview);
-                document.getElementById('dueDate').addEventListener('input', updatePreview);
-                document.getElementById('clientName').addEventListener('input', updatePreview);
-                document.getElementById('clientGst').addEventListener('input', updatePreview);
-                document.getElementById('clientAddress').addEventListener('input', updatePreview);
-                document.getElementById('deliveryAddress').addEventListener('input', updatePreview);
-                document.getElementById('phoneNumber').addEventListener('input', updatePreview);
-                document.getElementById('taxRate').addEventListener('input', updatePreview);
-                document.getElementById('roundOff').addEventListener('input', updatePreview);
-                document.getElementById('notes').addEventListener('input', updatePreview);
-            }
+            printInvoiceBtn.addEventListener('click', printInvoice);
+            printInvoiceBtnMobile.addEventListener('click', printInvoice);
+            
+            generatePdfBtn.addEventListener('click', generatePdf);
+            generatePdfBtnMobile.addEventListener('click', generatePdf);
+            
+            resetFormBtn.addEventListener('click', resetForm);
+            resetFormBtnMobile.addEventListener('click', resetForm);
             
             renderItems();
             updatePreview();
-            initializeEventListeners();
+            
+            document.getElementById('invoiceNo').addEventListener('input', updatePreview);
+            document.getElementById('invoiceDate').addEventListener('input', updatePreview);
+            document.getElementById('dueDate').addEventListener('input', updatePreview);
+            document.getElementById('clientName').addEventListener('input', updatePreview);
+            document.getElementById('clientGst').addEventListener('input', updatePreview);
+            document.getElementById('clientAddress').addEventListener('input', updatePreview);
+            document.getElementById('deliveryAddress').addEventListener('input', updatePreview);
+            document.getElementById('phoneNumber').addEventListener('input', updatePreview);
+            document.getElementById('taxRate').addEventListener('input', updatePreview);
+            document.getElementById('roundOff').addEventListener('input', updatePreview);
+            document.getElementById('notes').addEventListener('input', updatePreview);
         });
     </script>
 </body>
-</html>
+                    </html>
