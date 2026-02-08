@@ -1069,128 +1069,195 @@
         
         <!-- Hidden print template -->
         <div id="invoicePrintTemplate" class="invoice-print-output" style="display: none;">
-            <div class="watermark watermark-print"></div>
+            <!-- Page 1: Main Invoice Content -->
+            <div class="page-content" style="page-break-after: always;">
+                <div class="watermark watermark-print"></div>
+                
+                <div style="margin-bottom: 20px; border-bottom: 2px solid var(--primary-color); padding-bottom: 15px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <div style="width: 70px; height: 70px; overflow: hidden; flex-shrink: 0;">
+                                <img src="urbankutir.png" alt="Urban Kutir Logo" style="width: 100%; height: 100%; object-fit: contain;"
+                                     onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNzAiIGhlaWdodD0iNzAiIHZpZXdCb3g9IjAgMCA3MCA3MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjcwIiBoZWlnaHQ9IjcwIiByeD0iNiIgZmlsbD0idXJsKCNwYWludDBfbGluZWFyKSIvPgo8dGV4dCB4PSIzNSIgeT0iMzgiIGZvbnQtZmFtaWx5PSJJbnRlciIgZm9udC1zaXplPSIxNCIgZm9udC13ZWlnaHQ9ImJvbGQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiNmZmZmZmYiPlVLIC0gSW52b2ljZTwvdGV4dD4KPGRlZnM+CjxsaW5lYXJHcmFkaWVudCBpZD0icGFpbnQwX2xpbmVhciIgeDE9IjM1IiB5MT0iMCIgeDI9IjM1IiB5Mj0iNzAiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KPHN0b3Agc3RvcC1jb2xvcj0iIzhCNDUxMyIvPgo8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNBNjgzMkQiLz4KPC9saW5lYXJHcmFkaWVudD4KPC9kZWZzPgo8L3N2Zz4K'">
+                            </div>
+                            <div>
+                                <h1 style="color: var(--primary-dark); font-size: 24px; margin: 0 0 3px 0; font-weight: 700;">Urban Kutir</h1>
+                                <p style="color: var(--text-light); font-size: 13px; margin: 0 0 5px 0; font-weight: 500;">Premium Home Solutions & Interior Design</p>
+                                <p style="color: var(--text-light); font-size: 11px; margin: 0;">
+                                    <i class="fas fa-phone"></i> 9831859858 | <i class="fas fa-envelope"></i> urbankutir@gmail.com
+                                </p>
+                            </div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-size: 26px; color: var(--primary-dark); font-weight: 700; text-transform: uppercase; margin-bottom: 5px;">TAX INVOICE</div>
+                            <div style="font-size: 12px; color: var(--text-light); line-height: 1.4;">
+                                <p style="margin: 2px 0;"><strong>GSTIN:</strong> 19AAHFU6863E1ZR</p>
+                                <p style="margin: 2px 0;"><strong>STATE:</strong> WEST BENGAL</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 10px; font-size: 11px; color: var(--text-light);">
+                        <p style="margin: 2px 0;">59 Kali Charan Gosh Road, Binayak Enclave, Block J2, Flat 308, Kolkata 700050, West Bengal</p>
+                    </div>
+                </div>
+                
+                <div style="display: flex; justify-content: space-between; margin-bottom: 20px; font-size: 12px;">
+                    <div>
+                        <p style="margin: 3px 0;"><strong>INVOICE NO:</strong> <span id="printInvoiceNo">[Invoice Number]</span></p>
+                        <p style="margin: 3px 0;"><strong>DATE:</strong> <span id="printDate">[Date]</span></p>
+                        <p style="margin: 3px 0;"><strong>DUE DATE:</strong> <span id="printDueDate">[Due Date]</span></p>
+                    </div>
+                    <div style="text-align: right;">
+                        <p style="margin: 3px 0;"><strong>PAN:</strong> AAHFU6863E</p>
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: 20px; margin-bottom: 20px;">
+                    <div style="flex: 1; padding: 12px; background-color: var(--lighter-accent); border-radius: var(--radius); border-left: 3px solid var(--accent-color);">
+                        <div style="font-weight: 600; color: var(--primary-dark); margin-bottom: 7px; font-size: 14px;">BILLED TO:</div>
+                        <div style="color: var(--text-medium); line-height: 1.5; font-size: 12px;" id="printClient">
+                            [Client Information]
+                        </div>
+                    </div>
+                    <div style="flex: 1; padding: 12px; background-color: var(--lighter-accent); border-radius: var(--radius); border-left: 3px solid var(--accent-color);">
+                        <div style="font-weight: 600; color: var(--primary-dark); margin-bottom: 7px; font-size: 14px;">SHIP TO:</div>
+                        <div style="color: var(--text-medium); line-height: 1.5; font-size: 12px;" id="printDelivery">
+                            [Delivery Address]
+                        </div>
+                    </div>
+                </div>
+                
+                <table style="width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 11.5px; page-break-inside: avoid;">
+                    <thead>
+                        <tr>
+                            <th style="background-color: var(--light-accent); padding: 8px; text-align: center; font-weight: 600; color: var(--primary-dark); border: 1px solid var(--accent-color);" width="45">SL No</th>
+                            <th style="background-color: var(--light-accent); padding: 8px; text-align: left; font-weight: 600; color: var(--primary-dark); border: 1px solid var(--accent-color);">Description of Goods/Services</th>
+                            <th style="background-color: var(--light-accent); padding: 8px; text-align: center; font-weight: 600; color: var(--primary-dark); border: 1px solid var(--accent-color);" width="85">HSN/SAC</th>
+                            <th style="background-color: var(--light-accent); padding: 8px; text-align: center; font-weight: 600; color: var(--primary-dark); border: 1px solid var(--accent-color);" width="65">Qty</th>
+                            <th style="background-color: var(--light-accent); padding: 8px; text-align: right; font-weight: 600; color: var(--primary-dark); border: 1px solid var(--accent-color);" width="85">Rate (₹)</th>
+                            <th style="background-color: var(--light-accent); padding: 8px; text-align: center; font-weight: 600; color: var(--primary-dark); border: 1px solid var(--accent-color);" width="65">Unit</th>
+                            <th style="background-color: var(--light-accent); padding: 8px; text-align: right; font-weight: 600; color: var(--primary-dark); border: 1px solid var(--accent-color);" width="95">Amount (₹)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="printItems">
+                        <tr>
+                            <td colspan="7" style="text-align: center; padding: 15px; color: #95a5a6; font-style: italic;">[Add items using the form]</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div style="margin-top: 25px; width: 100%; max-width: 300px; margin-left: auto;">
+                    <div style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px dashed var(--border-color); font-size: 12.5px;">
+                        <span>Total Taxable Value</span>
+                        <span id="printTaxable">0.00</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px dashed var(--border-color); font-size: 12.5px;">
+                        <span>CGST <span id="printTaxRate">9</span>%</span>
+                        <span id="printCgst">0.00</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px dashed var(--border-color); font-size: 12.5px;">
+                        <span>SGST <span id="printSgstRate">9</span>%</span>
+                        <span id="printSgst">0.00</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px dashed var(--border-color); font-size: 12.5px;">
+                        <span>Round Off</span>
+                        <span id="printRoundOff">0.00</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 2px solid var(--primary-dark); font-size: 14px; font-weight: 700; color: var(--primary-dark);">
+                        <span>GRAND TOTAL</span>
+                        <span id="printTotal">₹0.00</span>
+                    </div>
+                </div>
+                
+                <div id="printNotes" style="margin-top: 15px; font-size: 11px; color: var(--text-medium); padding: 8px; background-color: var(--lighter-accent); border-radius: 4px; display: none;">
+                    <strong>Notes:</strong> <span id="printNotesContent"></span>
+                </div>
+                
+                <div style="margin-top: 25px; text-align: center; color: var(--text-light); font-size: 11px; padding-top: 15px; border-top: 1px solid var(--light-accent);">
+                    <p style="margin: 5px 0;"><strong>TOTAL AMOUNT:</strong> RUPEES <span id="printAmountWords">[Amount in words]</span> ONLY.</p>
+                    <p style="margin: 8px 0; font-size: 10px;">This is a computer generated invoice and does not require a physical signature. Subject to Kolkata Jurisdiction.</p>
+                    <p style="margin: 5px 0; font-size: 9px; color: #7f8c8d;">As per GST rules, this invoice is valid without signature | E. & O.E.</p>
+                </div>
+            </div>
             
-            <div style="margin-bottom: 25px; border-bottom: 2px solid var(--primary-color); padding-bottom: 15px;">
-                <div style="display: flex; align-items: center; justify-content: space-between;">
+            <!-- Page 2: Terms, Signature & Additional Information -->
+            <div class="page-content" style="page-break-before: always; padding-top: 20px;">
+                <div style="border-bottom: 2px solid var(--accent-color); padding-bottom: 10px; margin-bottom: 20px;">
                     <div style="display: flex; align-items: center; gap: 15px;">
-                        <div style="width: 70px; height: 70px; overflow: hidden; flex-shrink: 0;">
+                        <div style="width: 50px; height: 50px; overflow: hidden; flex-shrink: 0;">
                             <img src="urbankutir.png" alt="Urban Kutir Logo" style="width: 100%; height: 100%; object-fit: contain;"
-                                 onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNzAiIGhlaWdodD0iNzAiIHZpZXdCb3g9IjAgMCA3MCA3MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjcwIiBoZWlnaHQ9IjcwIiByeD0iNiIgZmlsbD0idXJsKCNwYWludDBfbGluZWFyKSIvPgo8dGV4dCB4PSIzNSIgeT0iMzgiIGZvbnQtZmFtaWx5PSJJbnRlciIgZm9udC1zaXplPSIxNCIgZm9udC13ZWlnaHQ9ImJvbGQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiNmZmZmZmYiPlVLCjwvdGV4dD4KPGRlZnM+CjxsaW5lYXJHcmFkaWVudCBpZD0icGFpbnQwX2xpbmVhciIgeDE9IjM1IiB5MT0iMCIgeDI9IjM1IiB5Mj0iNzAiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KPHN0b3Agc3RvcC1jb2xvcj0iIzhCNDUxMyIvPgo8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNBNjgzMkQiLz4KPC9saW5lYXJHcmFkaWVudD4KPC9kZWZzPgo8L3N2Zz4K'">
+                                 onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNzAiIGhlaWdodD0iNzAiIHZpZXdCb3g9IjAgMCA3MCA3MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjcwIiBoZWlnaHQ9IjcwIiByeD0iNiIgZmlsbD0idXJsKCNwYWludDBfbGluZWFyKSIvPgo8dGV4dCB4PSIzNSIgeT0iMzgiIGZvbnQtZmFtaWx5PSJJbnRlciIgZm9udC1zaXplPSIxNCIgZm9udC13ZWlnaHQ9ImJvbGQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiNmZmZmZmYiPlVLIC0gSW52b2ljZTwvdGV4dD4KPGRlZnM+CjxsaW5lYXJHcmFkaWVudCBpZD0icGFpbnQwX2xpbmVhciIgeDE9IjM1IiB5MT0iMCIgeDI9IjM1IiB5Mj0iNzAiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KPHN0b3Agc3RvcC1jb2xvcj0iIzhCNDUxMyIvPgo8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNBNjgzMkQiLz4KPC9saW5lYXJHcmFkaWVudD4KPC9kZWZzPgo8L3N2Zz4K'">
                         </div>
                         <div>
-                            <h1 style="color: var(--primary-dark); font-size: 24px; margin: 0 0 3px 0; font-weight: 700;">Urban Kutir</h1>
-                            <p style="color: var(--text-light); font-size: 13px; margin: 0 0 5px 0; font-weight: 500;">Premium Home Solutions & Interior Design</p>
-                            <p style="color: var(--text-light); font-size: 11px; margin: 0;">
-                                <i class="fas fa-phone"></i> 9831859858 | <i class="fas fa-envelope"></i> urbankutir@gmail.com
+                            <h2 style="color: var(--primary-dark); font-size: 20px; margin: 0;">Urban Kutir - Invoice Continuation</h2>
+                            <p style="color: var(--text-light); font-size: 12px; margin: 3px 0 0 0;">
+                                Invoice No: <span id="printInvoiceNo2">[Invoice Number]</span> | Date: <span id="printDate2">[Date]</span>
                             </p>
                         </div>
                     </div>
-                    <div style="text-align: right;">
-                        <div style="font-size: 26px; color: var(--primary-dark); font-weight: 700; text-transform: uppercase; margin-bottom: 5px;">TAX INVOICE</div>
-                        <div style="font-size: 12px; color: var(--text-light); line-height: 1.4;">
-                            <p style="margin: 2px 0;"><strong>GSTIN:</strong> 19AAHFU6863E1ZR</p>
-                            <p style="margin: 2px 0;"><strong>STATE:</strong> WEST BENGAL</p>
+                </div>
+                
+                <div style="margin-bottom: 25px;">
+                    <h3 style="color: var(--primary-dark); font-size: 16px; margin-bottom: 15px; border-bottom: 1px solid var(--accent-color); padding-bottom: 5px;">Terms & Conditions</h3>
+                    <div style="font-size: 11px; line-height: 1.6;">
+                        <p style="margin-bottom: 8px;"><strong>1. Payment Terms:</strong> 50% advance payment at the time of order confirmation. Remaining 50% to be paid before delivery.</p>
+                        <p style="margin-bottom: 8px;"><strong>2. Delivery:</strong> Delivery within 15 working days from order confirmation and receipt of advance payment.</p>
+                        <p style="margin-bottom: 8px;"><strong>3. Quality Assurance:</strong> All products are subject to quality checks before dispatch. Any manufacturing defects will be addressed within 7 days of delivery.</p>
+                        <p style="margin-bottom: 8px;"><strong>4. Cancellation:</strong> Orders can be cancelled within 24 hours without penalty. After 24 hours, 25% cancellation charges apply.</p>
+                        <p style="margin-bottom: 8px;"><strong>5. Warranty:</strong> Products carry a 1-year warranty against manufacturing defects from the date of delivery.</p>
+                        <p style="margin-bottom: 8px;"><strong>6. Taxes:</strong> All taxes as applicable will be charged extra. GST @ 18% will be applicable on all products/services.</p>
+                        <p style="margin-bottom: 8px;"><strong>7. Jurisdiction:</strong> All disputes are subject to Kolkata jurisdiction only.</p>
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: 20px; margin-bottom: 25px;">
+                    <div style="flex: 1;">
+                        <h3 style="color: var(--primary-dark); font-size: 16px; margin-bottom: 15px; border-bottom: 1px solid var(--accent-color); padding-bottom: 5px;">Bank Details</h3>
+                        <div style="font-size: 11px; line-height: 1.6;">
+                            <p style="margin-bottom: 5px;"><strong>Bank Name:</strong> State Bank of India</p>
+                            <p style="margin-bottom: 5px;"><strong>Account Name:</strong> URBAN KUTIR</p>
+                            <p style="margin-bottom: 5px;"><strong>Account Number:</strong> 123456789012</p>
+                            <p style="margin-bottom: 5px;"><strong>Account Type:</strong> Current Account</p>
+                            <p style="margin-bottom: 5px;"><strong>IFSC Code:</strong> SBIN0001234</p>
+                            <p style="margin-bottom: 5px;"><strong>Branch:</strong> Gariahat, Kolkata</p>
+                        </div>
+                    </div>
+                    <div style="flex: 1;">
+                        <h3 style="color: var(--primary-dark); font-size: 16px; margin-bottom: 15px; border-bottom: 1px solid var(--accent-color); padding-bottom: 5px;">Tax Details</h3>
+                        <div style="font-size: 11px; line-height: 1.6;">
+                            <p style="margin-bottom: 5px;"><strong>GSTIN:</strong> 19AAHFU6863E1ZR</p>
+                            <p style="margin-bottom: 5px;"><strong>PAN:</strong> AAHFU6863E</p>
+                            <p style="margin-bottom: 5px;"><strong>State:</strong> West Bengal</p>
+                            <p style="margin-bottom: 5px;"><strong>State Code:</strong> 19</p>
+                            <p style="margin-bottom: 5px;"><strong>Place of Supply:</strong> Kolkata, West Bengal</p>
                         </div>
                     </div>
                 </div>
-                <div style="margin-top: 10px; font-size: 11px; color: var(--text-light);">
-                    <p style="margin: 2px 0;">59 Kali Charan Gosh Road, Binayak Enclave, Block J2, Flat 308, Kolkata 700050, West Bengal</p>
-                </div>
-            </div>
-            
-            <div style="display: flex; justify-content: space-between; margin-bottom: 20px; font-size: 12px;">
-                <div>
-                    <p style="margin: 3px 0;"><strong>INVOICE NO:</strong> <span id="printInvoiceNo">[Invoice Number]</span></p>
-                    <p style="margin: 3px 0;"><strong>DATE:</strong> <span id="printDate">[Date]</span></p>
-                    <p style="margin: 3px 0;"><strong>DUE DATE:</strong> <span id="printDueDate">[Due Date]</span></p>
-                </div>
-                <div style="text-align: right;">
-                    <p style="margin: 3px 0;"><strong>PAN:</strong> AAHFU6863E</p>
-                </div>
-            </div>
-            
-            <div style="display: flex; gap: 20px; margin-bottom: 20px;">
-                <div style="flex: 1; padding: 12px; background-color: var(--lighter-accent); border-radius: var(--radius); border-left: 3px solid var(--accent-color);">
-                    <div style="font-weight: 600; color: var(--primary-dark); margin-bottom: 7px; font-size: 14px;">BILLED TO:</div>
-                    <div style="color: var(--text-medium); line-height: 1.5; font-size: 12px;" id="printClient">
-                        [Client Information]
+                
+                <div style="margin-top: 30px; padding-top: 20px; border-top: 1px dashed var(--accent-color); display: flex; justify-content: space-between; align-items: flex-start; font-size: 11px;">
+                    <div style="flex: 1;">
+                        <p style="margin: 4px 0;"><strong>Declaration:</strong> We declare that this invoice shows the actual price of the goods described and that all particulars are true and correct.</p>
+                        <p style="margin: 4px 0;"><strong>Certification:</strong> Certified that the particulars given above are true and correct.</p>
+                        <p style="margin: 4px 0;"><strong>E. & O.E.:</strong> Errors and omissions excepted.</p>
+                        <p style="margin: 4px 0;"><strong>For Urban Kutir:</strong></p>
+                        <p style="margin: 10px 0 0 0; font-size: 10px; color: #7f8c8d;">
+                            This is a computer generated invoice. No physical signature required as per GST rules.
+                        </p>
+                    </div>
+                    <div style="text-align: center; margin-left: 30px;">
+                        <div style="width: 160px; border-bottom: 1px solid var(--primary-dark); margin: 0 auto 5px; padding-top: 30px;"></div>
+                        <div style="font-weight: 600; color: var(--primary-dark); font-size: 13px;">Doel Pathak</div>
+                        <div style="color: var(--text-light); font-size: 11px;">Authorized Signatory</div>
+                        <div style="color: var(--text-light); font-size: 11px;">Urban Kutir</div>
+                        <div style="color: var(--text-light); font-size: 10px; margin-top: 10px;">Stamp & Seal</div>
                     </div>
                 </div>
-                <div style="flex: 1; padding: 12px; background-color: var(--lighter-accent); border-radius: var(--radius); border-left: 3px solid var(--accent-color);">
-                    <div style="font-weight: 600; color: var(--primary-dark); margin-bottom: 7px; font-size: 14px;">SHIP TO:</div>
-                    <div style="color: var(--text-medium); line-height: 1.5; font-size: 12px;" id="printDelivery">
-                        [Delivery Address]
-                    </div>
+                
+                <div style="margin-top: 40px; text-align: center; color: var(--text-light); font-size: 11px; padding-top: 15px; border-top: 1px solid var(--light-accent);">
+                    <p style="margin: 5px 0; font-size: 10px; color: #7f8c8d;">Thank you for your business!</p>
+                    <p style="margin: 5px 0; font-size: 10px;">For any queries, please contact: urbankutir@gmail.com | 9831859858</p>
+                    <p style="margin: 10px 0 0 0; font-size: 9px; color: #7f8c8d;">Generated from Urban Kutir Professional Invoice System | Page 2 of 2</p>
                 </div>
-            </div>
-            
-            <table style="width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 11.5px;">
-                <thead>
-                    <tr>
-                        <th style="background-color: var(--light-accent); padding: 8px; text-align: center; font-weight: 600; color: var(--primary-dark); border: 1px solid var(--accent-color);" width="45">SL No</th>
-                        <th style="background-color: var(--light-accent); padding: 8px; text-align: left; font-weight: 600; color: var(--primary-dark); border: 1px solid var(--accent-color);">Description of Goods/Services</th>
-                        <th style="background-color: var(--light-accent); padding: 8px; text-align: center; font-weight: 600; color: var(--primary-dark); border: 1px solid var(--accent-color);" width="85">HSN/SAC</th>
-                        <th style="background-color: var(--light-accent); padding: 8px; text-align: center; font-weight: 600; color: var(--primary-dark); border: 1px solid var(--accent-color);" width="65">Qty</th>
-                        <th style="background-color: var(--light-accent); padding: 8px; text-align: right; font-weight: 600; color: var(--primary-dark); border: 1px solid var(--accent-color);" width="85">Rate (₹)</th>
-                        <th style="background-color: var(--light-accent); padding: 8px; text-align: center; font-weight: 600; color: var(--primary-dark); border: 1px solid var(--accent-color);" width="65">Unit</th>
-                        <th style="background-color: var(--light-accent); padding: 8px; text-align: right; font-weight: 600; color: var(--primary-dark); border: 1px solid var(--accent-color);" width="95">Amount (₹)</th>
-                    </tr>
-                </thead>
-                <tbody id="printItems">
-                    <tr>
-                        <td colspan="7" style="text-align: center; padding: 15px; color: #95a5a6; font-style: italic;">[Add items using the form]</td>
-                    </tr>
-                </tbody>
-            </table>
-            
-            <div style="margin-top: 25px; width: 100%; max-width: 300px; margin-left: auto;">
-                <div style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px dashed var(--border-color); font-size: 12.5px;">
-                    <span>Total Taxable Value</span>
-                    <span id="printTaxable">0.00</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px dashed var(--border-color); font-size: 12.5px;">
-                    <span>CGST <span id="printTaxRate">9</span>%</span>
-                    <span id="printCgst">0.00</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px dashed var(--border-color); font-size: 12.5px;">
-                    <span>SGST <span id="printSgstRate">9</span>%</span>
-                    <span id="printSgst">0.00</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px dashed var(--border-color); font-size: 12.5px;">
-                    <span>Round Off</span>
-                    <span id="printRoundOff">0.00</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 2px solid var(--primary-dark); font-size: 14px; font-weight: 700; color: var(--primary-dark);">
-                    <span>GRAND TOTAL</span>
-                    <span id="printTotal">₹0.00</span>
-                </div>
-            </div>
-            
-            <div id="printNotes" style="margin-top: 15px; font-size: 11px; color: var(--text-medium); padding: 8px; background-color: var(--lighter-accent); border-radius: 4px; display: none;">
-                <strong>Notes:</strong> <span id="printNotesContent"></span>
-            </div>
-            
-            <div style="margin-top: 30px; padding-top: 20px; border-top: 1px dashed var(--accent-color); display: flex; justify-content: space-between; align-items: flex-start; font-size: 11px;">
-                <div style="flex: 1;">
-                    <p style="margin: 4px 0;"><strong>Payment Terms:</strong> 50% advance, 50% on delivery</p>
-                    <p style="margin: 4px 0;"><strong>Delivery:</strong> Within 15 working days from order confirmation</p>
-                    <p style="margin: 4px 0;"><strong>Bank Details:</strong> State Bank of India | A/C: 123456789012 | IFSC: SBIN0001234</p>
-                    <p style="margin: 4px 0;"><strong>Declaration:</strong> We declare that this invoice shows the actual price of the goods described and that all particulars are true and correct.</p>
-                </div>
-                <div style="text-align: center; margin-left: 30px;">
-                    <div style="width: 160px; border-bottom: 1px solid var(--primary-dark); margin: 0 auto 5px; padding-top: 30px;"></div>
-                    <div style="font-weight: 600; color: var(--primary-dark); font-size: 13px;">Doel Pathak</div>
-                    <div style="color: var(--text-light); font-size: 11px;">Authorized Signatory</div>
-                    <div style="color: var(--text-light); font-size: 11px;">Urban Kutir</div>
-                </div>
-            </div>
-            
-            <div style="margin-top: 25px; text-align: center; color: var(--text-light); font-size: 11px; padding-top: 15px; border-top: 1px solid var(--light-accent);">
-                <p style="margin: 5px 0;"><strong>TOTAL AMOUNT:</strong> RUPEES <span id="printAmountWords">[Amount in words]</span> ONLY.</p>
-                <p style="margin: 8px 0; font-size: 10px;">This is a computer generated invoice and does not require a physical signature. Subject to Kolkata Jurisdiction.</p>
-                <p style="margin: 5px 0; font-size: 9px; color: #7f8c8d;">As per GST rules, this invoice is valid without signature | E. & O.E.</p>
-                <p style="margin: 10px 0 0 0; font-size: 9px; color: #7f8c8d;">Generated from Urban Kutir Professional Invoice System</p>
             </div>
         </div>
         
@@ -1232,7 +1299,6 @@
             const printInvoiceBtn = document.getElementById('printInvoice');
             const generatePdfBtn = document.getElementById('generatePdf');
             const resetFormBtn = document.getElementById('resetForm');
-            const clientGstInput = document.getElementById('clientGst');
             
             const printInvoiceBtnMobile = document.getElementById('printInvoiceMobile');
             const generatePdfBtnMobile = document.getElementById('generatePdfMobile');
@@ -1506,9 +1572,11 @@
             function updatePrintTemplate() {
                 const invoiceNo = document.getElementById('invoiceNo').value;
                 document.getElementById('printInvoiceNo').textContent = invoiceNo || '[Invoice Number]';
+                document.getElementById('printInvoiceNo2').textContent = invoiceNo || '[Invoice Number]';
                 
                 const invoiceDate = document.getElementById('invoiceDate').value;
                 document.getElementById('printDate').textContent = invoiceDate ? formatDate(invoiceDate) : '[Date]';
+                document.getElementById('printDate2').textContent = invoiceDate ? formatDate(invoiceDate) : '[Date]';
                 
                 const dueDate = document.getElementById('dueDate').value;
                 document.getElementById('printDueDate').textContent = dueDate ? formatDate(dueDate) : '[Due Date]';
@@ -1645,13 +1713,17 @@
                             body {
                                 width: 210mm;
                                 min-height: 297mm;
-                                padding: 20mm;
+                                padding: 0;
                                 background: white;
                                 margin: 0;
                             }
                             @page {
                                 size: A4;
                                 margin: 20mm;
+                            }
+                            .page-content {
+                                padding: 20mm;
+                                min-height: 297mm;
                             }
                         </style>
                     </head>
@@ -1691,17 +1763,34 @@
                 const printTemplate = document.getElementById('invoicePrintTemplate');
                 printTemplate.style.display = 'block';
                 
+                // Set PDF properties
+                const pageWidth = 210;
+                const pageHeight = 297;
+                const margin = 20;
+                
                 html2canvas(printTemplate, {
                     scale: 2,
                     useCORS: true,
                     logging: false,
-                    backgroundColor: '#ffffff'
+                    backgroundColor: '#ffffff',
+                    width: printTemplate.scrollWidth,
+                    height: printTemplate.scrollHeight
                 }).then(canvas => {
                     const imgData = canvas.toDataURL('image/png');
-                    const imgWidth = 210;
+                    const imgWidth = pageWidth - 2 * margin;
                     const imgHeight = (canvas.height * imgWidth) / canvas.width;
                     
-                    doc.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+                    // Calculate number of pages needed
+                    const pages = Math.ceil(imgHeight / pageHeight);
+                    
+                    // Add first page
+                    doc.addImage(imgData, 'PNG', margin, margin, imgWidth, imgHeight);
+                    
+                    // Add additional pages if content is longer than one page
+                    for (let i = 1; i < pages; i++) {
+                        doc.addPage();
+                        doc.addImage(imgData, 'PNG', margin, margin - (i * pageHeight), imgWidth, imgHeight);
+                    }
                     
                     const invoiceNo = document.getElementById('invoiceNo').value || 'Draft';
                     doc.save(`UrbanKutir_Invoice_${invoiceNo}.pdf`);
@@ -1782,4 +1871,4 @@
         });
     </script>
 </body>
-</html>
+                    </html>
