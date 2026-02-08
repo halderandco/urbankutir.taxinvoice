@@ -487,7 +487,7 @@
             pointer-events: none;
             width: 350px;
             height: 350px;
-            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTEwMCAxMjVMMTI1IDEwMEwxMDAgNzVMNzUgMTAwTDEwMCAxMjVaTTEwMCAxNzVMMTc1IDEwMEwxMDAgMjVMNTAgNzVMMjUgMTAwTDUwIDEyNUwyNSAxNTBMNTAgMTc1TDEwMCAyMjVMMTc1IDE1MEwxNTAgMTI1TDE3NSAxMDBMMjAwIDc1TDE3NSA1MEwxNTAgNzVMMTI1IDUwTDEwMCA3NUw3NSA1MEw1MCA3NUw3NSAxMDBMNTAgMTI1TDc1IDE1MEwxMDAgMTc1WiIgZmlsbD0iIzhCNDUxMyIvPjwvc3ZnPg==');
+            background-image: url('urbankutir.png');
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
@@ -689,90 +689,102 @@
             max-width: 110px;
         }
         
-        .logo-watermark {
-            display: none;
-        }
-        
         @media print {
-            @page {
-                margin: 0.5in;
-            }
-            
             body {
-                background: white !important;
-                padding: 0 !important;
+                background-color: white !important;
                 margin: 0 !important;
+                padding: 0 !important;
             }
             
             body * {
                 visibility: hidden;
-            }
-            
-            .print-container, .print-container * {
-                visibility: visible;
-            }
-            
-            .print-container {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
-                padding: 0;
-                margin: 0;
-                background: white;
-            }
-            
-            .controls, .editor-panel, footer, header, .mobile-controls,
-            .watermark, .logo-watermark {
-                display: none !important;
-            }
-            
-            .invoice-container {
-                display: block !important;
                 margin: 0 !important;
-                gap: 0 !important;
+                padding: 0 !important;
             }
             
-            .preview-panel {
-                box-shadow: none !important;
-                border: none !important;
+            .printable-invoice, .printable-invoice * {
+                visibility: visible !important;
+            }
+            
+            .printable-invoice {
+                position: absolute !important;
+                left: 0 !important;
+                top: 0 !important;
+                width: 100% !important;
+                height: 100% !important;
+                background-color: white !important;
+                padding: 15px !important;
+                margin: 0 !important;
+                font-size: 11pt !important;
+                line-height: 1.3 !important;
+            }
+            
+            .printable-invoice .watermark {
+                opacity: 0.05 !important;
+                z-index: 0 !important;
+                width: 400px !important;
+                height: 400px !important;
+            }
+            
+            .printable-invoice .preview-panel {
+                all: unset !important;
+                width: 100% !important;
+                height: 100% !important;
                 padding: 0 !important;
                 margin: 0 !important;
-                page-break-after: always;
+                border: none !important;
+                box-shadow: none !important;
+                border-radius: 0 !important;
+                position: relative !important;
+                overflow: visible !important;
+                background-color: white !important;
             }
             
-            .logo-watermark.print-visible {
-                display: block !important;
-                position: fixed;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%) rotate(-45deg);
-                opacity: 0.03;
-                z-index: 9999;
-                pointer-events: none;
-                width: 400px;
-                height: 400px;
-                background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTEwMCAxMjVMMTI1IDEwMEwxMDAgNzVMNzUgMTAwTDEwMCAxMjVaTTEwMCAxNzVMMTc1IDEwMEwxMDAgMjVMNTAgNzVMMjUgMTAwTDUwIDEyNUwyNSAxNTBMNTAgMTc1TDEwMCAyMjVMMTc1IDE1MEwxNTAgMTI1TDE3NSAxMDBMMjAwIDc1TDE3NSA1MEwxNTAgNzVMMTI1IDUwTDEwMCA3NUw3NSA1MEw1MCA3NUw3NSAxMDBMNTAgMTI1TDc1IDE1MEwxMDAgMTc1WiIgZmlsbD0iIzhCNDUxMyIvPjwvc3ZnPg==');
-                background-size: contain;
-                background-repeat: no-repeat;
-                background-position: center;
+            .printable-invoice .invoice-title {
+                font-size: 22pt !important;
             }
             
-            .invoice-table {
-                page-break-inside: avoid;
+            .printable-invoice .invoice-table {
+                font-size: 10pt !important;
+                margin: 10px 0 !important;
             }
             
-            .authorization-section {
-                page-break-inside: avoid;
+            .printable-invoice .invoice-table th,
+            .printable-invoice .invoice-table td {
+                padding: 6px 8px !important;
             }
             
-            .btn {
+            .printable-invoice .address-content,
+            .printable-invoice .invoice-meta p {
+                font-size: 10pt !important;
+            }
+            
+            .printable-invoice .summary-row {
+                padding: 5px 0 !important;
+                font-size: 10pt !important;
+            }
+            
+            .printable-invoice .summary-row.total {
+                font-size: 11pt !important;
+            }
+            
+            .printable-invoice .invoice-footer {
+                font-size: 10pt !important;
+                margin-top: 10px !important;
+                padding-top: 10px !important;
+            }
+            
+            .no-print {
                 display: none !important;
             }
             
-            .container {
-                max-width: 100% !important;
-                margin: 0 !important;
+            .controls, .editor-panel, footer, header, .mobile-controls, .btn {
+                display: none !important;
+            }
+            
+            @page {
+                margin: 15mm !important;
+                size: A4 !important;
             }
         }
         
@@ -805,12 +817,43 @@
             box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.15);
         }
         
-        .print-container {
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
             display: none;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid var(--light-accent);
+            border-top: 5px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <p style="color: var(--primary-dark); font-weight: 600; margin-top: 10px;">Generating PDF...</p>
+    </div>
+    
     <div class="container">
         <header>
             <div class="logo-container">
@@ -968,7 +1011,7 @@
                 </button>
             </div>
             
-            <div class="preview-panel compact-panel">
+            <div class="preview-panel compact-panel" id="invoicePreview">
                 <div class="watermark"></div>
                 
                 <div class="print-only">
@@ -1094,9 +1137,6 @@
         </footer>
     </div>
     
-    <div class="print-container" id="printContainer"></div>
-    <div class="logo-watermark" id="logoWatermark"></div>
-    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     
@@ -1131,8 +1171,7 @@
             const generatePdfBtn = document.getElementById('generatePdf');
             const resetFormBtn = document.getElementById('resetForm');
             const clientGstInput = document.getElementById('clientGst');
-            const printContainer = document.getElementById('printContainer');
-            const logoWatermark = document.getElementById('logoWatermark');
+            const loadingOverlay = document.getElementById('loadingOverlay');
             
             const printInvoiceBtnMobile = document.getElementById('printInvoiceMobile');
             const generatePdfBtnMobile = document.getElementById('generatePdfMobile');
@@ -1141,41 +1180,16 @@
             function preloadWatermark() {
                 const watermark = document.querySelector('.watermark');
                 const logoImg = document.querySelector('.logo-img');
-                
-                const svgWatermark = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTEwMCAxMjVMMTI1IDEwMEwxMDAgNzVMNzUgMTAwTDEwMCAxMjVaTTEwMCAxNzVMMTc1IDEwMEwxMDAgMjVMNTAgNzVMMjUgMTAwTDUwIDEyNUwyNSAxNTBMNTAgMTc1TDEwMCAyMjVMMTc1IDE1MEwxNTAgMTI1TDE3NSAxMDBMMjAwIDc1TDE3NSA1MEwxNTAgNzVMMTI1IDUwTDEwMCA3NUw3NSA1MEw1MCA3NUw3NSAxMDBMNTAgMTI1TDc1IDE1MEwxMDAgMTc1WiIgZmlsbD0iIzhCNDUxMyIvPjwvc3ZnPg==';
-                
-                if (logoImg && logoImg.src && !logoImg.src.includes('data:image')) {
-                    const img = new Image();
-                    img.crossOrigin = 'anonymous';
-                    img.onload = function() {
-                        try {
-                            const canvas = document.createElement('canvas');
-                            const ctx = canvas.getContext('2d');
-                            canvas.width = 200;
-                            canvas.height = 200;
-                            
-                            ctx.fillStyle = '#8B4513';
-                            ctx.font = 'bold 160px Arial';
-                            ctx.textAlign = 'center';
-                            ctx.textBaseline = 'middle';
-                            ctx.globalAlpha = 0.7;
-                            ctx.fillText('UK', 100, 100);
-                            
-                            watermark.style.backgroundImage = `url(${canvas.toDataURL()})`;
-                            logoWatermark.style.backgroundImage = `url(${canvas.toDataURL()})`;
-                        } catch (e) {
-                            watermark.style.backgroundImage = `url(${svgWatermark})`;
-                            logoWatermark.style.backgroundImage = `url(${svgWatermark})`;
-                        }
-                    };
-                    img.onerror = function() {
-                        watermark.style.backgroundImage = `url(${svgWatermark})`;
-                        logoWatermark.style.backgroundImage = `url(${svgWatermark})`;
-                    };
-                    img.src = logoImg.src;
+                if (logoImg.complete && logoImg.naturalWidth !== 0) {
+                    watermark.style.backgroundImage = `url('${logoImg.src}')`;
                 } else {
-                    watermark.style.backgroundImage = `url(${svgWatermark})`;
-                    logoWatermark.style.backgroundImage = `url(${svgWatermark})`;
+                    logoImg.onload = function() {
+                        watermark.style.backgroundImage = `url('${logoImg.src}')`;
+                    };
+                    logoImg.onerror = function() {
+                        watermark.style.backgroundImage = 'none';
+                        watermark.style.backgroundColor = 'rgba(139, 69, 19, 0.015)';
+                    };
                 }
             }
             
@@ -1453,151 +1467,263 @@
             updateInvoiceBtn.addEventListener('click', updatePreview);
             
             function printInvoice() {
-                const previewPanel = document.querySelector('.preview-panel');
-                const clone = previewPanel.cloneNode(true);
+                const invoicePreview = document.getElementById('invoicePreview');
+                const printWindow = window.open('', '_blank');
                 
-                clone.classList.add('print-visible');
-                clone.style.cssText = `
-                    position: relative;
-                    background: white;
-                    padding: 20px;
-                    margin: 0;
-                    box-shadow: none;
-                    border: none;
+                const originalWatermark = invoicePreview.querySelector('.watermark');
+                const watermarkStyle = window.getComputedStyle(originalWatermark);
+                
+                const printContent = `
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <title>Urban Kutir Invoice</title>
+                        <style>
+                            @page {
+                                margin: 15mm;
+                                size: A4;
+                            }
+                            body {
+                                font-family: 'Inter', sans-serif;
+                                margin: 0;
+                                padding: 15px;
+                                background: white;
+                                color: #2c1810;
+                                font-size: 11pt;
+                                line-height: 1.3;
+                            }
+                            .printable-invoice {
+                                position: relative;
+                                width: 100%;
+                                min-height: 100%;
+                            }
+                            .watermark {
+                                position: absolute;
+                                top: 50%;
+                                left: 50%;
+                                transform: translate(-50%, -50%) rotate(-45deg);
+                                opacity: 0.05;
+                                z-index: 0;
+                                pointer-events: none;
+                                width: 400px;
+                                height: 400px;
+                                background-image: url('${originalWatermark.style.backgroundImage || 'none'}');
+                                background-size: contain;
+                                background-repeat: no-repeat;
+                                background-position: center;
+                            }
+                            .invoice-header {
+                                display: flex;
+                                justify-content: space-between;
+                                margin-bottom: 20px;
+                                padding-bottom: 15px;
+                                border-bottom: 1px solid #f0e6d6;
+                            }
+                            .invoice-title {
+                                font-size: 22pt;
+                                color: #5a3921;
+                                font-weight: 700;
+                                text-transform: uppercase;
+                            }
+                            .invoice-meta {
+                                text-align: right;
+                            }
+                            .invoice-meta p {
+                                margin-bottom: 3px;
+                                color: #8B4513;
+                                font-size: 10pt;
+                            }
+                            .address-content {
+                                color: #5a3921;
+                                line-height: 1.5;
+                                font-size: 10pt;
+                            }
+                            .company-gst-box {
+                                background-color: #fcfaf7;
+                                padding: 4px 8px;
+                                border-radius: 4px;
+                                margin-top: 5px;
+                                border: 1px solid #e0d6c8;
+                                display: inline-block;
+                                font-size: 10pt;
+                            }
+                            .invoice-addresses {
+                                display: flex;
+                                justify-content: space-between;
+                                margin-bottom: 20px;
+                                gap: 20px;
+                            }
+                            .address-box {
+                                flex: 1;
+                                background-color: #fcfaf7;
+                                padding: 12px;
+                                border-radius: 6px;
+                                border-left: 3px solid #d4a574;
+                            }
+                            .address-title {
+                                font-weight: 600;
+                                color: #5a3921;
+                                margin-bottom: 5px;
+                                font-size: 12pt;
+                            }
+                            .invoice-table {
+                                width: 100%;
+                                border-collapse: collapse;
+                                margin: 15px 0;
+                                font-size: 10pt;
+                            }
+                            .invoice-table th {
+                                background-color: #f0e6d6;
+                                padding: 6px 8px;
+                                text-align: left;
+                                font-weight: 600;
+                                color: #5a3921;
+                                border-bottom: 1px solid #d4a574;
+                                border-top: 1px solid #d4a574;
+                            }
+                            .invoice-table td {
+                                padding: 6px 8px;
+                                border-bottom: 1px solid #f0e6d6;
+                            }
+                            .text-right { text-align: right; }
+                            .text-center { text-align: center; }
+                            .invoice-summary {
+                                margin-top: 20px;
+                                width: 100%;
+                                max-width: 280px;
+                                margin-left: auto;
+                            }
+                            .summary-row {
+                                display: flex;
+                                justify-content: space-between;
+                                padding: 5px 0;
+                                border-bottom: 1px dashed #e0d6c8;
+                                font-size: 10pt;
+                            }
+                            .summary-row.total {
+                                font-weight: 700;
+                                font-size: 11pt;
+                                border-bottom: 1px solid #5a3921;
+                                padding-top: 8px;
+                                color: #5a3921;
+                            }
+                            .authorization-section {
+                                margin-top: 25px;
+                                padding-top: 15px;
+                                border-top: 1px dashed #d4a574;
+                                display: flex;
+                                justify-content: space-between;
+                                align-items: center;
+                            }
+                            .signature-box {
+                                text-align: center;
+                            }
+                            .signature-line {
+                                width: 160px;
+                                border-bottom: 1px solid #5a3921;
+                                margin: 0 auto 4px;
+                                padding-top: 30px;
+                            }
+                            .signature-name {
+                                font-weight: 600;
+                                color: #5a3921;
+                                font-size: 12pt;
+                            }
+                            .signature-title {
+                                color: #8B4513;
+                                font-size: 10pt;
+                            }
+                            .invoice-footer {
+                                margin-top: 15px;
+                                text-align: center;
+                                color: #8B4513;
+                                font-size: 10pt;
+                                padding-top: 15px;
+                                border-top: 1px solid #f0e6d6;
+                            }
+                            .empty-state {
+                                color: #95a5a6;
+                                font-style: italic;
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="printable-invoice">
+                            <div class="watermark"></div>
+                            <div style="position: relative; z-index: 1;">
+                                ${invoicePreview.innerHTML}
+                            </div>
+                            <div style="text-align: center; margin-top: 20px; font-size: 9pt; color: #7f8c8d;">
+                                <p>Generated from Urban Kutir Professional Invoice System</p>
+                            </div>
+                        </div>
+                        <script>
+                            window.onload = function() {
+                                window.print();
+                                setTimeout(function() {
+                                    window.close();
+                                }, 500);
+                            };
+                        <\/script>
+                    </body>
+                    </html>
                 `;
                 
-                const watermarkClone = document.createElement('div');
-                watermarkClone.className = 'logo-watermark print-visible';
-                watermarkClone.style.cssText = `
-                    position: fixed;
-                    top: 50%;
-                    left: 50%;
-                    transform: translate(-50%, -50%) rotate(-45deg);
-                    opacity: 0.03;
-                    z-index: 9999;
-                    pointer-events: none;
-                    width: 400px;
-                    height: 400px;
-                    background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTEwMCAxMjVMMTI1IDEwMEwxMDAgNzVMNzUgMTAwTDEwMCAxMjVaTTEwMCAxNzVMMTc1IDEwMEwxMDAgMjVMNTAgNzVMMjUgMTAwTDUwIDEyNUwyNSAxNTBMNTAgMTc1TDEwMCAyMjVMMTc1IDE1MEwxNTAgMTI1TDE3NSAxMDBMMjAwIDc1TDE3NSA1MEwxNTAgNzVMMTI1IDUwTDEwMCA3NUw3NSA1MEw1MCA3NUw3NSAxMDBMNTAgMTI1TDc1IDE1MEwxMDAgMTc1WiIgZmlsbD0iIzhCNDUxMyIvPjwvc3ZnPg==');
-                    background-size: contain;
-                    background-repeat: no-repeat;
-                    background-position: center;
-                `;
-                
-                printContainer.innerHTML = '';
-                printContainer.appendChild(clone);
-                printContainer.appendChild(watermarkClone);
-                
-                const printBtnText = printInvoiceBtn.innerHTML;
-                const printBtnTextMobile = printInvoiceBtnMobile.innerHTML;
-                printInvoiceBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Preparing...';
-                printInvoiceBtnMobile.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Preparing...';
-                
-                setTimeout(() => {
-                    document.body.classList.add('printing');
-                    logoWatermark.classList.add('print-visible');
-                    
-                    window.print();
-                    
-                    setTimeout(() => {
-                        document.body.classList.remove('printing');
-                        logoWatermark.classList.remove('print-visible');
-                        printContainer.innerHTML = '';
-                        
-                        printInvoiceBtn.innerHTML = printBtnText;
-                        printInvoiceBtnMobile.innerHTML = printBtnTextMobile;
-                    }, 100);
-                }, 100);
+                printWindow.document.write(printContent);
+                printWindow.document.close();
             }
             
             function generatePdf() {
-                const previewPanel = document.querySelector('.preview-panel');
-                const clone = previewPanel.cloneNode(true);
+                loadingOverlay.style.display = 'flex';
                 
-                clone.style.cssText = `
-                    position: absolute;
-                    left: -9999px;
-                    top: 0;
-                    width: 794px;
-                    padding: 40px;
-                    background: white;
-                    box-shadow: none;
-                    border: 1px solid #ddd;
-                `;
+                const invoicePreview = document.getElementById('invoicePreview');
+                const { jsPDF } = window.jspdf;
                 
-                const watermarkClone = document.createElement('div');
-                watermarkClone.style.cssText = `
-                    position: absolute;
-                    top: 50%;
-                    left: 50%;
-                    transform: translate(-50%, -50%) rotate(-45deg);
-                    opacity: 0.03;
-                    z-index: 9999;
-                    pointer-events: none;
-                    width: 500px;
-                    height: 500px;
-                    background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTEwMCAxMjVMMTI1IDEwMEwxMDAgNzVMNzUgMTAwTDEwMCAxMjVaTTEwMCAxNzVMMTc1IDEwMEwxMDAgMjVMNTAgNzVMMjUgMTAwTDUwIDEyNUwyNSAxNTBMNTAgMTc1TDEwMCAyMjVMMTc1IDE1MEwxNTAgMTI1TDE3NSAxMDBMMjAwIDc1TDE3NSA1MEwxNTAgNzVMMTI1IDUwTDEwMCA3NUw3NSA1MEw1MCA3NUw3NSAxMDBMNTAgMTI1TDc1IDE1MEwxMDAgMTc1WiIgZmlsbD0iIzhCNDUxMyIvPjwvc3ZnPg==');
-                    background-size: contain;
-                    background-repeat: no-repeat;
-                    background-position: center;
-                `;
-                
-                clone.appendChild(watermarkClone);
-                document.body.appendChild(clone);
-                
-                const pdfBtnText = generatePdfBtn.innerHTML;
-                const pdfBtnTextMobile = generatePdfBtnMobile.innerHTML;
-                generatePdfBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
-                generatePdfBtnMobile.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
-                generatePdfBtn.disabled = true;
-                generatePdfBtnMobile.disabled = true;
-                
-                html2canvas(clone, {
-                    scale: 2,
-                    useCORS: true,
-                    logging: false,
-                    backgroundColor: '#ffffff',
-                    allowTaint: true,
-                    onclone: function(clonedDoc) {
-                        const clonedWatermark = clonedDoc.querySelector('[style*="background-image"]');
-                        if (clonedWatermark) {
-                            clonedWatermark.style.opacity = '0.03';
+                setTimeout(() => {
+                    html2canvas(invoicePreview, {
+                        scale: 2,
+                        useCORS: true,
+                        logging: false,
+                        backgroundColor: '#ffffff',
+                        allowTaint: true,
+                        onclone: function(clonedDoc) {
+                            const clonedWatermark = clonedDoc.querySelector('.watermark');
+                            if (clonedWatermark) {
+                                clonedWatermark.style.opacity = '0.05';
+                                clonedWatermark.style.width = '400px';
+                                clonedWatermark.style.height = '400px';
+                            }
                         }
-                    }
-                }).then(canvas => {
-                    const { jsPDF } = window.jspdf;
-                    const doc = new jsPDF({
-                        orientation: 'portrait',
-                        unit: 'px',
-                        format: 'a4'
+                    }).then(canvas => {
+                        const imgData = canvas.toDataURL('image/png', 1.0);
+                        const pdf = new jsPDF('p', 'mm', 'a4');
+                        const imgWidth = 210;
+                        const pageHeight = 297;
+                        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                        
+                        let heightLeft = imgHeight;
+                        let position = 0;
+                        
+                        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                        heightLeft -= pageHeight;
+                        
+                        while (heightLeft >= 0) {
+                            position = heightLeft - imgHeight;
+                            pdf.addPage();
+                            pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                            heightLeft -= pageHeight;
+                        }
+                        
+                        const invoiceNo = document.getElementById('invoiceNo').value || 'Draft';
+                        pdf.save(`UrbanKutir_Invoice_${invoiceNo}.pdf`);
+                        
+                        loadingOverlay.style.display = 'none';
+                    }).catch(error => {
+                        console.error('Error generating PDF:', error);
+                        loadingOverlay.style.display = 'none';
+                        alert('Error generating PDF. Please try again or use the Print function.');
                     });
-                    
-                    const imgData = canvas.toDataURL('image/png');
-                    const imgWidth = doc.internal.pageSize.getWidth();
-                    const imgHeight = (canvas.height * imgWidth) / canvas.width;
-                    
-                    doc.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
-                    
-                    const invoiceNo = document.getElementById('invoiceNo').value || 'Draft';
-                    doc.save(`Urban_Kutir_Invoice_${invoiceNo}.pdf`);
-                    
-                    document.body.removeChild(clone);
-                    
-                    generatePdfBtn.innerHTML = pdfBtnText;
-                    generatePdfBtnMobile.innerHTML = pdfBtnTextMobile;
-                    generatePdfBtn.disabled = false;
-                    generatePdfBtnMobile.disabled = false;
-                }).catch(error => {
-                    console.error('Error generating PDF:', error);
-                    document.body.removeChild(clone);
-                    
-                    generatePdfBtn.innerHTML = pdfBtnText;
-                    generatePdfBtnMobile.innerHTML = pdfBtnTextMobile;
-                    generatePdfBtn.disabled = false;
-                    generatePdfBtnMobile.disabled = false;
-                    
-                    alert('Error generating PDF. Please try again or use the Print function.');
-                });
+                }, 500);
             }
             
             function resetForm() {
@@ -1655,13 +1781,7 @@
             document.getElementById('taxRate').addEventListener('input', updatePreview);
             document.getElementById('roundOff').addEventListener('input', updatePreview);
             document.getElementById('notes').addEventListener('input', updatePreview);
-            
-            window.addEventListener('afterprint', function() {
-                document.body.classList.remove('printing');
-                logoWatermark.classList.remove('print-visible');
-                printContainer.innerHTML = '';
-            });
         });
     </script>
 </body>
-                    </html>
+</html>
