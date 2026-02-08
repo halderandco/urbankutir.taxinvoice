@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Urban Kutir - Professional Tax Invoice System</title>
+    <title>Urban Kutir - Professional Invoice System</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root {
             --primary-color: #8B4513;
@@ -35,8 +34,6 @@
             line-height: 1.5;
             padding: 12px;
             font-size: 14px;
-            -webkit-print-color-adjust: exact !important;
-            print-color-adjust: exact !important;
         }
         
         .container {
@@ -490,7 +487,7 @@
             pointer-events: none;
             width: 350px;
             height: 350px;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text x="50" y="50" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="14" fill="%238B4513" opacity="0.1">Urban Kutir</text></svg>');
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200"><text x="50%" y="50%" text-anchor="middle" fill="%238B4513" font-family="Inter" font-size="24" font-weight="bold" opacity="0.2">URBAN KUTIR</text></svg>');
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
@@ -692,68 +689,76 @@
             max-width: 110px;
         }
         
-        /* Print and PDF specific styles */
+        /* Print Styles - Enhanced for better printing */
         @media print {
-            body {
-                background-color: white !important;
-                padding: 0 !important;
-                margin: 0 !important;
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-            }
-            
-            .container {
-                max-width: 100% !important;
-                margin: 0 !important;
-                box-shadow: none !important;
-            }
-            
-            header, .editor-panel, footer, .mobile-controls, 
-            .desktop-controls, .controls-container, .btn {
-                display: none !important;
+            body * {
+                visibility: hidden;
+                margin: 0;
+                padding: 0;
             }
             
             .preview-panel {
-                width: 100% !important;
-                max-width: 100% !important;
-                padding: 20px !important;
-                margin: 0 !important;
-                box-shadow: none !important;
-                border: none !important;
-                border-radius: 0 !important;
-                break-inside: avoid;
+                visibility: visible;
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                box-shadow: none;
+                border: none;
+                padding: 20mm 15mm;
+                margin: 0;
+                background: white;
+                page-break-inside: avoid;
+                page-break-after: avoid;
+                page-break-before: avoid;
+                overflow: visible !important;
+            }
+            
+            .preview-panel * {
+                visibility: visible;
             }
             
             .watermark {
-                opacity: 0.03 !important;
-                width: 400px !important;
-                height: 400px !important;
+                opacity: 0.03;
+            }
+            
+            .controls, .editor-panel, footer, header, .mobile-controls,
+            .btn, .logo-container, .company-contact, .print-only {
+                display: none !important;
             }
             
             .invoice-table {
-                font-size: 11pt !important;
+                font-size: 10pt !important;
+                page-break-inside: avoid;
             }
             
-            .address-content, .invoice-meta p, .summary-row, 
-            .invoice-footer, .authorization-section, 
-            .address-title, .invoice-title {
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
+            .address-content, .invoice-meta p {
+                font-size: 10pt !important;
             }
             
-            .company-gst-box, .address-box {
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
+            .invoice-summary {
+                max-width: 250px;
             }
             
-            @page {
-                margin: 15mm;
-                size: A4;
+            .summary-row.total {
+                font-size: 12pt;
             }
-        }
-        
-        .pdf-watermark {
-            display: none;
+            
+            .authorization-section {
+                page-break-inside: avoid;
+                margin-top: 20px;
+            }
+            
+            /* Ensure no page breaks inside important sections */
+            .invoice-header, .invoice-addresses, .invoice-summary {
+                page-break-inside: avoid;
+            }
+            
+            /* Add margin for page breaks if needed */
+            .invoice-table tbody tr {
+                page-break-inside: avoid;
+            }
         }
         
         .compact-spacing {
@@ -785,6 +790,7 @@
             box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.15);
         }
         
+        /* Loading overlay for PDF generation */
         .loading-overlay {
             position: fixed;
             top: 0;
@@ -792,62 +798,40 @@
             width: 100%;
             height: 100%;
             background: rgba(255, 255, 255, 0.9);
-            display: flex;
-            flex-direction: column;
+            display: none;
             justify-content: center;
             align-items: center;
             z-index: 9999;
-            display: none;
+            flex-direction: column;
+            gap: 15px;
         }
         
-        .spinner {
+        .loading-spinner {
             width: 50px;
             height: 50px;
-            border: 5px solid var(--light-accent);
-            border-top-color: var(--primary-color);
+            border: 3px solid var(--light-accent);
+            border-top: 3px solid var(--primary-color);
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            margin-bottom: 20px;
         }
         
         @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: var(--primary-color);
-            color: white;
-            padding: 12px 20px;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            z-index: 10000;
-            display: none;
-            animation: slideIn 0.3s ease;
-        }
-        
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
     <div class="loading-overlay" id="loadingOverlay">
-        <div class="spinner"></div>
-        <p id="loadingText">Generating PDF...</p>
+        <div class="loading-spinner"></div>
+        <div style="color: var(--primary-dark); font-weight: 600;">Generating PDF...</div>
     </div>
-    
-    <div class="notification" id="notification"></div>
     
     <div class="container">
         <header>
             <div class="logo-container">
                 <div class="logo">
-                    <img src="https://via.placeholder.com/60x60/8B4513/FFFFFF?text=UK" alt="Urban Kutir Logo" class="logo-img" id="companyLogo">
-                    <div id="logo-fallback" class="logo-fallback" style="display: none;">
+                    <div class="logo-fallback">
                         <i class="fas fa-home"></i>
                     </div>
                 </div>
@@ -1001,6 +985,10 @@
             <div class="preview-panel compact-panel" id="invoicePreview">
                 <div class="watermark"></div>
                 
+                <div class="print-only">
+                    <p>Generated from Urban Kutir Professional Invoice System</p>
+                </div>
+                
                 <div class="invoice-header">
                     <div>
                         <div class="invoice-title">TAX INVOICE</div>
@@ -1119,29 +1107,36 @@
             <p>Urban Kutir Professional Invoice System &copy; 2025 | GST No: 19AAHFU6863E1ZR</p>
         </footer>
     </div>
-
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Initialize dates
+            // Initialize today's date
             const today = new Date();
             const formattedToday = today.toISOString().split('T')[0];
             document.getElementById('invoiceDate').value = formattedToday;
             
+            // Set due date to 15 days from now
             const dueDate = new Date(today);
             dueDate.setDate(today.getDate() + 15);
             const formattedDueDate = dueDate.toISOString().split('T')[0];
             document.getElementById('dueDate').value = formattedDueDate;
             
-            // Items array
+            // Generate a default invoice number
+            const defaultInvoiceNo = `INV-${today.getFullYear()}${String(today.getMonth() + 1).padStart(2, '0')}-001`;
+            document.getElementById('invoiceNo').value = defaultInvoiceNo;
+            
             let items = [
                 { 
                     slNo: 1, 
-                    name: "", 
-                    hsnCode: "", 
+                    name: "Interior Design Consultation", 
+                    hsnCode: "9984", 
                     qty: 1, 
-                    price: 0, 
-                    unit: "Pcs",
-                    total: 0 
+                    price: 5000, 
+                    unit: "Session",
+                    total: 5000 
                 }
             ];
             
@@ -1153,73 +1148,17 @@
             const printInvoiceBtn = document.getElementById('printInvoice');
             const generatePdfBtn = document.getElementById('generatePdf');
             const resetFormBtn = document.getElementById('resetForm');
-            
             const printInvoiceBtnMobile = document.getElementById('printInvoiceMobile');
             const generatePdfBtnMobile = document.getElementById('generatePdfMobile');
             const resetFormBtnMobile = document.getElementById('resetFormMobile');
-            
             const loadingOverlay = document.getElementById('loadingOverlay');
-            const loadingText = document.getElementById('loadingText');
-            const notification = document.getElementById('notification');
+            const invoicePreview = document.getElementById('invoicePreview');
             
-            // Preload logo for PDF/Print
-            function preloadLogo() {
-                const logoImg = new Image();
-                logoImg.src = 'https://via.placeholder.com/60x60/8B4513/FFFFFF?text=UK';
-                logoImg.crossOrigin = "anonymous";
-                
-                logoImg.onload = function() {
-                    document.getElementById('companyLogo').src = logoImg.src;
-                    createWatermark();
-                };
-                
-                logoImg.onerror = function() {
-                    document.getElementById('logo-fallback').style.display = 'flex';
-                    document.getElementById('companyLogo').style.display = 'none';
-                    createWatermark();
-                };
-            }
+            // Initialize the form
+            renderItems();
+            updatePreview();
             
-            // Create dynamic watermark
-            function createWatermark() {
-                const watermark = document.querySelector('.watermark');
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
-                
-                canvas.width = 400;
-                canvas.height = 400;
-                
-                ctx.save();
-                ctx.translate(200, 200);
-                ctx.rotate(-Math.PI / 4);
-                ctx.font = 'bold 40px Arial';
-                ctx.fillStyle = 'rgba(139, 69, 19, 0.03)';
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillText('URBAN KUTIR', 0, 0);
-                ctx.font = '20px Arial';
-                ctx.fillText('TAX INVOICE', 0, 50);
-                ctx.restore();
-                
-                const dataURL = canvas.toDataURL();
-                watermark.style.backgroundImage = `url('${dataURL}')`;
-            }
-            
-            // Initialize watermark
-            setTimeout(createWatermark, 100);
-            
-            // Show notification
-            function showNotification(message, type = 'success') {
-                notification.textContent = message;
-                notification.style.display = 'block';
-                notification.style.backgroundColor = type === 'success' ? 'var(--primary-color)' : '#e74c3c';
-                
-                setTimeout(() => {
-                    notification.style.display = 'none';
-                }, 3000);
-            }
-            
-            // Render items in editor
+            // Function to render items in the editor
             function renderItems() {
                 itemsContainer.innerHTML = '';
                 
@@ -1242,7 +1181,7 @@
                     itemsContainer.appendChild(row);
                 });
                 
-                // Add event listeners
+                // Attach event listeners to delete buttons
                 document.querySelectorAll('.item-action-btn').forEach(button => {
                     button.addEventListener('click', function() {
                         const index = parseInt(this.getAttribute('data-index'));
@@ -1255,6 +1194,7 @@
                     });
                 });
                 
+                // Attach event listeners to quantity and price inputs
                 document.querySelectorAll('.item-qty, .item-price').forEach(input => {
                     input.addEventListener('input', function() {
                         const row = this.closest('tr');
@@ -1276,6 +1216,7 @@
                     });
                 });
                 
+                // Attach event listeners to description, HSN, and unit inputs
                 document.querySelectorAll('.item-name, .item-hsn, .item-unit').forEach(input => {
                     input.addEventListener('input', function() {
                         const row = this.closest('tr');
@@ -1294,7 +1235,7 @@
                 });
             }
             
-            // Render preview items
+            // Function to render items in the preview
             function renderPreviewItems() {
                 previewItems.innerHTML = '';
                 
@@ -1326,16 +1267,15 @@
                 });
             }
             
-            // Format currency
+            // Format currency for display
             function formatCurrency(amount, withDecimals = false) {
-                if (isNaN(amount)) amount = 0;
                 if (withDecimals) {
                     return amount.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2});
                 }
                 return amount.toLocaleString('en-IN');
             }
             
-            // Number to words conversion
+            // Convert number to words for amount in words
             function numberToWords(num) {
                 if (num === 0) return 'ZERO';
                 
@@ -1384,7 +1324,7 @@
                 return words.trim() || 'ZERO';
             }
             
-            // Update preview
+            // Update the preview panel
             function updatePreview() {
                 const invoiceNo = document.getElementById('invoiceNo').value;
                 document.getElementById('previewInvoiceNo').textContent = invoiceNo || '[Invoice Number]';
@@ -1467,7 +1407,7 @@
                 }
             }
             
-            // Format date
+            // Format date for display
             function formatDate(dateString) {
                 if (!dateString) return '';
                 const date = new Date(dateString);
@@ -1477,129 +1417,153 @@
                 return `${day}/${month}/${year}`;
             }
             
-            // Print function
+            // Add item button handler
+            addItemBtn.addEventListener('click', function() {
+                const newSlNo = items.length + 1;
+                items.push({
+                    slNo: newSlNo,
+                    name: "",
+                    hsnCode: "",
+                    qty: 1,
+                    price: 0,
+                    unit: "Pcs",
+                    total: 0
+                });
+                renderItems();
+                updatePreview();
+            });
+            
+            // Update invoice button handler
+            updateInvoiceBtn.addEventListener('click', updatePreview);
+            
+            // Print invoice function
             function printInvoice() {
-                loadingText.textContent = 'Preparing for print...';
-                loadingOverlay.style.display = 'flex';
+                // Create a clean print version
+                const originalContent = document.body.innerHTML;
+                const printContent = invoicePreview.innerHTML;
                 
-                // Wait for any pending updates
-                setTimeout(() => {
-                    const originalBody = document.body.innerHTML;
-                    const printContent = document.getElementById('invoicePreview').outerHTML;
-                    
-                    document.body.innerHTML = `
-                        <!DOCTYPE html>
-                        <html>
-                        <head>
-                            <title>Urban Kutir Invoice - Print</title>
-                            <style>
-                                body { 
-                                    margin: 0; 
-                                    padding: 15mm; 
-                                    font-family: 'Inter', sans-serif; 
-                                    -webkit-print-color-adjust: exact;
-                                    print-color-adjust: exact;
-                                }
-                                @page { 
-                                    margin: 15mm; 
-                                    size: A4;
-                                }
-                                .watermark {
-                                    position: absolute;
-                                    top: 50%;
-                                    left: 50%;
-                                    transform: translate(-50%, -50%) rotate(-45deg);
-                                    opacity: 0.03;
-                                    z-index: 0;
-                                    pointer-events: none;
-                                    width: 400px;
-                                    height: 400px;
-                                    background-size: contain;
-                                    background-repeat: no-repeat;
-                                    background-position: center;
-                                }
-                                * {
-                                    -webkit-print-color-adjust: exact !important;
-                                    print-color-adjust: exact !important;
-                                }
-                            </style>
-                        </head>
-                        <body>
-                            ${printContent}
-                            <script>
-                                window.onload = function() {
+                // Replace the body with just the invoice
+                document.body.innerHTML = `
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <title>Urban Kutir Invoice - ${document.getElementById('invoiceNo').value || 'Invoice'}</title>
+                        <style>
+                            @media print {
+                                @page { margin: 15mm; }
+                                body { font-family: 'Inter', sans-serif; }
+                                table { page-break-inside: avoid; }
+                            }
+                        </style>
+                    </head>
+                    <body style="font-family: 'Inter', sans-serif; margin: 0; padding: 20mm 15mm;">
+                        ${printContent}
+                        <script>
+                            window.onload = function() {
+                                setTimeout(() => {
                                     window.print();
-                                    setTimeout(function() {
-                                        window.close();
-                                    }, 100);
-                                };
-                            <\/script>
-                        </body>
-                        </html>
-                    `;
-                    
-                    window.onafterprint = function() {
-                        document.body.innerHTML = originalBody;
-                        location.reload();
-                    };
-                    
-                    loadingOverlay.style.display = 'none';
-                    showNotification('Invoice sent to printer', 'success');
-                }, 500);
+                                    setTimeout(() => {
+                                        document.body.innerHTML = originalContent;
+                                        window.location.reload();
+                                    }, 500);
+                                }, 250);
+                            }
+                        <\/script>
+                    </body>
+                    </html>
+                `;
             }
             
             // Generate PDF function
             function generatePdf() {
-                loadingText.textContent = 'Generating PDF...';
                 loadingOverlay.style.display = 'flex';
                 
-                // Update preview one more time
-                updatePreview();
+                // Use jsPDF for PDF generation
+                const { jsPDF } = window.jspdf;
                 
+                // Create a temporary div for PDF generation
+                const tempDiv = document.createElement('div');
+                tempDiv.style.cssText = `
+                    position: absolute;
+                    left: -9999px;
+                    top: -9999px;
+                    width: 210mm;
+                    padding: 20mm;
+                    background: white;
+                    font-family: 'Inter', sans-serif;
+                `;
+                
+                // Clone the invoice preview
+                const invoiceClone = invoicePreview.cloneNode(true);
+                invoiceClone.style.cssText = `
+                    width: 100%;
+                    box-shadow: none;
+                    border: none;
+                    padding: 0;
+                    margin: 0;
+                `;
+                
+                // Remove unnecessary elements for PDF
+                invoiceClone.querySelectorAll('.btn, .mobile-controls, .print-only').forEach(el => el.remove());
+                
+                tempDiv.appendChild(invoiceClone);
+                document.body.appendChild(tempDiv);
+                
+                // Generate PDF
                 setTimeout(() => {
-                    const invoiceElement = document.getElementById('invoicePreview');
-                    const invoiceNo = document.getElementById('invoiceNo').value || 'Draft';
-                    
-                    const options = {
-                        margin: [15, 15, 15, 15],
-                        filename: `UrbanKutir_Invoice_${invoiceNo}.pdf`,
-                        image: { type: 'jpeg', quality: 0.98 },
-                        html2canvas: { 
-                            scale: 2,
-                            useCORS: true,
-                            logging: false,
-                            backgroundColor: '#ffffff',
-                            onclone: function(clonedDoc) {
-                                // Ensure watermark is visible in PDF
-                                const watermark = clonedDoc.querySelector('.watermark');
-                                if (watermark) {
-                                    watermark.style.opacity = '0.03';
-                                }
-                            }
-                        },
-                        jsPDF: { 
-                            unit: 'mm', 
-                            format: 'a4', 
-                            orientation: 'portrait',
-                            compress: true
+                    html2canvas(tempDiv, {
+                        scale: 2,
+                        useCORS: true,
+                        logging: false,
+                        backgroundColor: '#ffffff',
+                        allowTaint: true,
+                        onclone: function(clonedDoc) {
+                            clonedDoc.querySelectorAll('.watermark').forEach(el => {
+                                el.style.opacity = '0.03';
+                            });
                         }
-                    };
-                    
-                    html2pdf().set(options).from(invoiceElement).save().then(() => {
+                    }).then(canvas => {
+                        const imgData = canvas.toDataURL('image/png');
+                        const pdf = new jsPDF('p', 'mm', 'a4');
+                        
+                        const imgWidth = 210; // A4 width in mm
+                        const pageHeight = 297; // A4 height in mm
+                        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                        
+                        let heightLeft = imgHeight;
+                        let position = 0;
+                        
+                        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                        heightLeft -= pageHeight;
+                        
+                        // Add additional pages if content is too long
+                        while (heightLeft >= 0) {
+                            position = heightLeft - imgHeight;
+                            pdf.addPage();
+                            pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                            heightLeft -= pageHeight;
+                        }
+                        
+                        const invoiceNo = document.getElementById('invoiceNo').value || 'Draft';
+                        pdf.save(`UrbanKutir_Invoice_${invoiceNo}.pdf`);
+                        
+                        // Clean up
+                        document.body.removeChild(tempDiv);
                         loadingOverlay.style.display = 'none';
-                        showNotification('PDF downloaded successfully!', 'success');
+                        
                     }).catch(error => {
-                        console.error('PDF generation error:', error);
+                        console.error('Error generating PDF:', error);
                         loadingOverlay.style.display = 'none';
-                        showNotification('Error generating PDF. Please try again.', 'error');
+                        alert('Error generating PDF. Please try printing instead.');
+                        document.body.removeChild(tempDiv);
                     });
-                }, 800);
+                }, 500);
             }
             
-            // Reset form
+            // Reset form function
             function resetForm() {
                 if (confirm('Are you sure you want to reset the form? All data will be cleared.')) {
-                    document.getElementById('invoiceNo').value = '';
+                    document.getElementById('invoiceNo').value = defaultInvoiceNo;
                     document.getElementById('invoiceDate').value = formattedToday;
                     document.getElementById('dueDate').value = formattedDueDate;
                     document.getElementById('poNumber').value = '';
@@ -1615,41 +1579,21 @@
                     items = [
                         { 
                             slNo: 1, 
-                            name: "", 
-                            hsnCode: "", 
+                            name: "Interior Design Consultation", 
+                            hsnCode: "9984", 
                             qty: 1, 
-                            price: 0, 
-                            unit: "Pcs",
-                            total: 0 
+                            price: 5000, 
+                            unit: "Session",
+                            total: 5000 
                         }
                     ];
                     
                     renderItems();
                     updatePreview();
-                    showNotification('Form reset successfully', 'success');
                 }
             }
             
-            // Add item
-            addItemBtn.addEventListener('click', function() {
-                const newSlNo = items.length + 1;
-                items.push({
-                    slNo: newSlNo,
-                    name: "",
-                    hsnCode: "",
-                    qty: 1,
-                    price: 0,
-                    unit: "Pcs",
-                    total: 0
-                });
-                renderItems();
-                updatePreview();
-                showNotification('New item added', 'success');
-            });
-            
-            // Event listeners
-            updateInvoiceBtn.addEventListener('click', updatePreview);
-            
+            // Attach event listeners to buttons
             printInvoiceBtn.addEventListener('click', printInvoice);
             printInvoiceBtnMobile.addEventListener('click', printInvoice);
             
@@ -1659,29 +1603,84 @@
             resetFormBtn.addEventListener('click', resetForm);
             resetFormBtnMobile.addEventListener('click', resetForm);
             
-            // Auto-update on input
-            const autoUpdateFields = [
+            // Auto-update preview on input changes
+            const autoUpdateInputs = [
                 'invoiceNo', 'invoiceDate', 'dueDate', 'clientName', 'clientGst',
                 'clientAddress', 'deliveryAddress', 'phoneNumber', 'taxRate',
                 'roundOff', 'notes'
             ];
             
-            autoUpdateFields.forEach(fieldId => {
-                document.getElementById(fieldId).addEventListener('input', updatePreview);
+            autoUpdateInputs.forEach(id => {
+                document.getElementById(id).addEventListener('input', updatePreview);
             });
             
-            // Initialize
-            preloadLogo();
-            renderItems();
-            updatePreview();
-            
-            // Prevent form submission on enter
+            // Add keyboard shortcuts
             document.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
+                // Ctrl+P for print
+                if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
                     e.preventDefault();
+                    printInvoice();
+                }
+                
+                // Ctrl+S for save/update
+                if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                    e.preventDefault();
+                    updatePreview();
+                    showToast('Invoice preview updated');
+                }
+                
+                // Ctrl+D for adding item
+                if ((e.ctrlKey || e.metaKey) && e.key === 'd') {
+                    e.preventDefault();
+                    addItemBtn.click();
                 }
             });
+            
+            // Toast notification function
+            function showToast(message) {
+                const toast = document.createElement('div');
+                toast.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: var(--primary-color);
+                    color: white;
+                    padding: 12px 20px;
+                    border-radius: 5px;
+                    z-index: 10000;
+                    font-weight: 500;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                    animation: slideIn 0.3s ease;
+                `;
+                
+                toast.textContent = message;
+                document.body.appendChild(toast);
+                
+                setTimeout(() => {
+                    toast.style.animation = 'slideOut 0.3s ease';
+                    setTimeout(() => {
+                        document.body.removeChild(toast);
+                    }, 300);
+                }, 3000);
+                
+                // Add CSS for animations
+                if (!document.querySelector('#toast-styles')) {
+                    const style = document.createElement('style');
+                    style.id = 'toast-styles';
+                    style.textContent = `
+                        @keyframes slideIn {
+                            from { transform: translateX(100%); opacity: 0; }
+                            to { transform: translateX(0); opacity: 1; }
+                        }
+                        @keyframes slideOut {
+                            from { transform: translateX(0); opacity: 1; }
+                            to { transform: translateX(100%); opacity: 0; }
+                        }
+                    `;
+                    document.head.appendChild(style);
+                }
+            }
         });
     </script>
 </body>
-</html>
+                    </html>
