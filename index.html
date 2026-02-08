@@ -485,30 +485,16 @@
             opacity: 0.025;
             z-index: 0;
             pointer-events: none;
-            font-size: 120px;
-            color: var(--primary-color);
-            font-weight: bold;
-            white-space: nowrap;
-        }
-        
-        .watermark-logo {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) rotate(-45deg);
-            opacity: 0.03;
-            z-index: 0;
-            pointer-events: none;
             width: 350px;
             height: 350px;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200"><rect width="200" height="200" fill="none"/><text x="100" y="100" font-family="Arial" font-size="24" fill="%238B4513" text-anchor="middle" dominant-baseline="middle">URBAN KUTIR</text></svg>');
+            background-image: url('urbankutir.png');
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
         }
         
         @media (max-width: 768px) {
-            .watermark-logo {
+            .watermark {
                 width: 200px;
                 height: 200px;
             }
@@ -705,74 +691,77 @@
         
         @media print {
             body {
-                background: white;
-                margin: 0;
-                padding: 0;
+                background-color: white !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                font-size: 11pt !important;
             }
             
             body * {
                 visibility: hidden;
             }
             
-            .print-container, .print-container * {
-                visibility: visible;
+            .preview-panel, .preview-panel * {
+                visibility: visible !important;
             }
             
-            .print-container {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
-                padding: 20px;
-                background: white;
-                box-shadow: none;
-                border: none;
+            .preview-panel {
+                position: absolute !important;
+                left: 0 !important;
+                top: 0 !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                height: 100% !important;
+                box-shadow: none !important;
+                border: none !important;
+                padding: 15mm !important;
+                margin: 0 !important;
+                page-break-inside: avoid !important;
+                page-break-after: avoid !important;
+                page-break-before: avoid !important;
             }
             
-            .watermark, .watermark-logo {
-                opacity: 0.05;
-                display: block !important;
+            .watermark {
+                opacity: 0.05 !important;
+                width: 300px !important;
+                height: 300px !important;
             }
             
             .controls, .editor-panel, footer, header, .mobile-controls, .btn {
-                display: none;
+                display: none !important;
             }
             
             .print-only {
-                display: block;
+                display: block !important;
                 text-align: center;
                 margin-bottom: 12px;
-                font-size: 10px;
+                font-size: 9pt;
                 color: var(--text-light);
             }
             
             .invoice-table {
-                font-size: 11pt;
-                page-break-inside: avoid;
+                font-size: 10pt !important;
             }
             
             .address-content, .invoice-meta p {
-                font-size: 11pt;
+                font-size: 10pt !important;
             }
             
-            .preview-panel {
-                box-shadow: none;
-                border: none;
-                padding: 0;
+            .invoice-title {
+                font-size: 18pt !important;
             }
             
-            .container {
-                max-width: 100%;
-                margin: 0;
-                padding: 0;
+            .panel-title, .items-section-title {
+                font-size: 12pt !important;
             }
             
-            .invoice-summary {
-                page-break-inside: avoid;
+            .summary-row.total {
+                font-size: 12pt !important;
             }
             
-            .authorization-section {
-                page-break-inside: avoid;
+            @page {
+                margin: 15mm;
+                size: A4;
             }
         }
         
@@ -805,33 +794,56 @@
             box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.15);
         }
         
-        .btn-loading {
-            opacity: 0.7;
-            cursor: not-allowed;
+        .hidden {
+            display: none !important;
         }
         
-        .btn-loading i {
+        #pdfOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            font-size: 18px;
+            color: var(--primary-dark);
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid var(--light-accent);
+            border-top: 5px solid var(--primary-color);
+            border-radius: 50%;
             animation: spin 1s linear infinite;
+            margin-bottom: 20px;
         }
         
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        
-        .print-container {
-            display: none;
-            position: absolute;
-            left: -9999px;
-        }
     </style>
 </head>
 <body>
+    <div id="pdfOverlay" class="hidden">
+        <div class="spinner"></div>
+        <p>Generating PDF...</p>
+        <p style="font-size: 14px; margin-top: 10px;">Please wait while we prepare your invoice</p>
+    </div>
+    
     <div class="container">
         <header>
             <div class="logo-container">
                 <div class="logo">
-                    <div id="logo-fallback" class="logo-fallback">
+                    <img src="urbankutir.png" alt="Urban Kutir Logo" class="logo-img" 
+                         onerror="document.getElementById('logo-fallback').style.display='flex'; this.style.display='none'">
+                    <div id="logo-fallback" class="logo-fallback" style="display: none;">
                         <i class="fas fa-home"></i>
                     </div>
                 </div>
@@ -982,9 +994,12 @@
                 </button>
             </div>
             
-            <div class="preview-panel compact-panel">
-                <div class="watermark">URBAN KUTIR</div>
-                <div class="watermark-logo"></div>
+            <div class="preview-panel compact-panel" id="invoiceForPrint">
+                <div class="watermark"></div>
+                
+                <div class="print-only">
+                    <p>Generated from Urban Kutir Professional Invoice System</p>
+                </div>
                 
                 <div class="invoice-header">
                     <div>
@@ -1100,9 +1115,6 @@
             </div>
         </div>
         
-        <!-- Hidden container for print/PDF generation -->
-        <div class="print-container" id="printContainer"></div>
-        
         <footer>
             <p>Urban Kutir Professional Invoice System &copy; 2025 | GST No: 19AAHFU6863E1ZR</p>
         </footer>
@@ -1141,11 +1153,39 @@
             const printInvoiceBtn = document.getElementById('printInvoice');
             const generatePdfBtn = document.getElementById('generatePdf');
             const resetFormBtn = document.getElementById('resetForm');
-            const printContainer = document.getElementById('printContainer');
+            const clientGstInput = document.getElementById('clientGst');
             
             const printInvoiceBtnMobile = document.getElementById('printInvoiceMobile');
             const generatePdfBtnMobile = document.getElementById('generatePdfMobile');
             const resetFormBtnMobile = document.getElementById('resetFormMobile');
+            const pdfOverlay = document.getElementById('pdfOverlay');
+            
+            // Ensure watermark is properly loaded
+            function preloadWatermark() {
+                const watermark = document.querySelector('.watermark');
+                const logoImg = document.querySelector('.logo-img');
+                
+                // Create a fallback if image doesn't load
+                const fallbackLogo = document.createElement('div');
+                fallbackLogo.innerHTML = '<i class="fas fa-home" style="font-size: 100px; color: rgba(139, 69, 19, 0.1);"></i>';
+                fallbackLogo.style.display = 'none';
+                fallbackLogo.className = 'watermark-fallback';
+                watermark.appendChild(fallbackLogo);
+                
+                if (logoImg.complete && logoImg.naturalWidth !== 0) {
+                    watermark.style.backgroundImage = `url('${logoImg.src}')`;
+                } else {
+                    logoImg.onload = function() {
+                        watermark.style.backgroundImage = `url('${logoImg.src}')`;
+                    };
+                    logoImg.onerror = function() {
+                        watermark.style.backgroundImage = 'none';
+                        fallbackLogo.style.display = 'block';
+                    };
+                }
+            }
+            
+            setTimeout(preloadWatermark, 500);
             
             function renderItems() {
                 itemsContainer.innerHTML = '';
@@ -1336,10 +1376,7 @@
                     if (clientName.trim()) clientHTML += clientName + '<br>';
                     if (clientAddress.trim()) clientHTML += clientAddress.replace(/\n/g, '<br>');
                     
-                    document.getElementById('previewClient').innerHTML = clientHTML + 
-                        (clientGst.trim() ? `<div style="margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--accent-color);">
-                            <strong>GSTIN:</strong> <span id="previewClientGstNumber">${clientGst}</span>
-                        </div>` : '');
+                    document.getElementById('previewClient').innerHTML = clientHTML;
                     
                     document.getElementById('previewClient').querySelectorAll('.empty-state').forEach(el => el.remove());
                 } else {
@@ -1418,147 +1455,139 @@
             
             updateInvoiceBtn.addEventListener('click', updatePreview);
             
-            function preparePrintContent() {
-                const previewPanel = document.querySelector('.preview-panel');
-                const clonedPanel = previewPanel.cloneNode(true);
-                
-                clonedPanel.classList.add('print-container');
-                clonedPanel.style.position = 'relative';
-                clonedPanel.style.display = 'block';
-                clonedPanel.style.background = 'white';
-                clonedPanel.style.padding = '20px';
-                clonedPanel.style.margin = '0';
-                clonedPanel.style.boxShadow = 'none';
-                clonedPanel.style.border = 'none';
-                clonedPanel.style.width = '100%';
-                
-                const watermark = clonedPanel.querySelector('.watermark');
-                const watermarkLogo = clonedPanel.querySelector('.watermark-logo');
-                if (watermark) watermark.style.opacity = '0.05';
-                if (watermarkLogo) watermarkLogo.style.opacity = '0.03';
-                
-                printContainer.innerHTML = '';
-                printContainer.appendChild(clonedPanel);
-                
-                return clonedPanel;
-            }
-            
             function printInvoice() {
-                preparePrintContent();
+                // Create a clone of the invoice for printing
+                const originalInvoice = document.getElementById('invoiceForPrint');
+                const clone = originalInvoice.cloneNode(true);
                 
+                // Enhance the clone for printing
+                clone.style.width = '210mm';
+                clone.style.minHeight = '297mm';
+                clone.style.margin = '0 auto';
+                clone.style.padding = '15mm';
+                clone.style.boxShadow = 'none';
+                clone.style.border = '1px solid #ccc';
+                clone.style.backgroundColor = 'white';
+                
+                // Temporarily add to document for printing
+                document.body.appendChild(clone);
+                clone.style.position = 'absolute';
+                clone.style.top = '0';
+                clone.style.left = '0';
+                clone.style.zIndex = '99999';
+                
+                // Trigger print
+                window.print();
+                
+                // Clean up after printing
                 setTimeout(() => {
-                    const originalBody = document.body.innerHTML;
-                    const printContent = printContainer.innerHTML;
-                    
-                    document.body.innerHTML = `
-                        <!DOCTYPE html>
-                        <html>
-                        <head>
-                            <title>Urban Kutir - Invoice</title>
-                            <style>
-                                @media print {
-                                    @page {
-                                        margin: 15mm;
-                                    }
-                                    body {
-                                        margin: 0;
-                                        padding: 0;
-                                        font-family: 'Inter', sans-serif;
-                                    }
-                                    .watermark {
-                                        opacity: 0.05 !important;
-                                    }
-                                    .watermark-logo {
-                                        opacity: 0.03 !important;
-                                    }
-                                    table {
-                                        page-break-inside: auto;
-                                    }
-                                    tr {
-                                        page-break-inside: avoid;
-                                        page-break-after: auto;
-                                    }
-                                }
-                                ${document.querySelector('style').textContent}
-                            </style>
-                        </head>
-                        <body>
-                            ${printContent}
-                        </body>
-                        </html>
-                    `;
-                    
-                    window.print();
-                    
-                    document.body.innerHTML = originalBody;
-                    renderItems();
-                    updatePreview();
+                    document.body.removeChild(clone);
                 }, 100);
             }
             
-            async function generatePdf() {
-                const originalText = generatePdfBtn.innerHTML;
-                const originalTextMobile = generatePdfBtnMobile.innerHTML;
+            function generatePdf() {
+                const { jsPDF } = window.jspdf;
                 
-                generatePdfBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
-                generatePdfBtnMobile.innerHTML = '<i class="fas fa-spinner fa-spin"></i> PDF';
-                generatePdfBtn.classList.add('btn-loading');
-                generatePdfBtnMobile.classList.add('btn-loading');
-                generatePdfBtn.disabled = true;
-                generatePdfBtnMobile.disabled = true;
+                // Show loading overlay
+                pdfOverlay.classList.remove('hidden');
                 
-                try {
-                    const printContent = preparePrintContent();
+                // Use setTimeout to ensure DOM updates before capturing
+                setTimeout(() => {
+                    const invoiceElement = document.getElementById('invoiceForPrint');
                     
-                    const { jsPDF } = window.jspdf;
-                    const doc = new jsPDF({
-                        orientation: 'portrait',
-                        unit: 'mm',
-                        format: 'a4'
-                    });
+                    // Temporarily adjust styles for better PDF capture
+                    const originalStyles = {
+                        width: invoiceElement.style.width,
+                        height: invoiceElement.style.height,
+                        margin: invoiceElement.style.margin,
+                        padding: invoiceElement.style.padding
+                    };
                     
-                    const pageWidth = doc.internal.pageSize.getWidth();
-                    const pageHeight = doc.internal.pageSize.getHeight();
+                    invoiceElement.style.width = '210mm';
+                    invoiceElement.style.minHeight = '297mm';
+                    invoiceElement.style.margin = '0 auto';
+                    invoiceElement.style.padding = '15mm';
+                    invoiceElement.style.boxShadow = 'none';
+                    invoiceElement.style.border = '1px solid #ccc';
+                    invoiceElement.style.backgroundColor = 'white';
                     
-                    const canvas = await html2canvas(printContent, {
+                    // Ensure watermark is visible
+                    const watermark = invoiceElement.querySelector('.watermark');
+                    if (watermark) {
+                        watermark.style.opacity = '0.05';
+                    }
+                    
+                    html2canvas(invoiceElement, {
                         scale: 2,
                         useCORS: true,
                         logging: false,
                         backgroundColor: '#ffffff',
-                        allowTaint: true
+                        allowTaint: true,
+                        foreignObjectRendering: false,
+                        onclone: function(clonedDoc) {
+                            // Ensure watermark is visible in cloned document
+                            const clonedWatermark = clonedDoc.querySelector('.watermark');
+                            if (clonedWatermark) {
+                                clonedWatermark.style.opacity = '0.05';
+                            }
+                        }
+                    }).then(canvas => {
+                        // Restore original styles
+                        invoiceElement.style.width = originalStyles.width;
+                        invoiceElement.style.height = originalStyles.height;
+                        invoiceElement.style.margin = originalStyles.margin;
+                        invoiceElement.style.padding = originalStyles.padding;
+                        invoiceElement.style.boxShadow = '';
+                        invoiceElement.style.border = '';
+                        invoiceElement.style.backgroundColor = '';
+                        
+                        if (watermark) {
+                            watermark.style.opacity = '0.025';
+                        }
+                        
+                        const imgData = canvas.toDataURL('image/png');
+                        const pdf = new jsPDF({
+                            orientation: 'portrait',
+                            unit: 'mm',
+                            format: 'a4'
+                        });
+                        
+                        const pageWidth = 210;
+                        const pageHeight = 297;
+                        const margin = 15;
+                        
+                        const imgWidth = pageWidth - (margin * 2);
+                        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                        
+                        let position = 0;
+                        
+                        // Add image to PDF
+                        pdf.addImage(imgData, 'PNG', margin, margin, imgWidth, imgHeight);
+                        
+                        // Check if we need additional pages
+                        if (imgHeight > (pageHeight - (margin * 2))) {
+                            let heightLeft = imgHeight;
+                            position = -pageHeight + margin;
+                            
+                            while (heightLeft > 0) {
+                                pdf.addPage();
+                                pdf.addImage(imgData, 'PNG', margin, position, imgWidth, imgHeight);
+                                heightLeft -= (pageHeight - (margin * 2));
+                                position -= (pageHeight - (margin * 2));
+                            }
+                        }
+                        
+                        const invoiceNo = document.getElementById('invoiceNo').value || 'Draft';
+                        pdf.save(`UrbanKutir_Invoice_${invoiceNo}.pdf`);
+                        
+                        // Hide loading overlay
+                        pdfOverlay.classList.add('hidden');
+                    }).catch(error => {
+                        console.error('Error generating PDF:', error);
+                        pdfOverlay.classList.add('hidden');
+                        alert('Error generating PDF. Please try again or use the Print function instead.');
                     });
-                    
-                    const imgData = canvas.toDataURL('image/png');
-                    const imgWidth = pageWidth;
-                    const imgHeight = (canvas.height * imgWidth) / canvas.width;
-                    
-                    let heightLeft = imgHeight;
-                    let position = 0;
-                    
-                    doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-                    heightLeft -= pageHeight;
-                    
-                    while (heightLeft >= 0) {
-                        position = heightLeft - imgHeight;
-                        doc.addPage();
-                        doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-                        heightLeft -= pageHeight;
-                    }
-                    
-                    const invoiceNo = document.getElementById('invoiceNo').value || 'Draft';
-                    doc.save(`UrbanKutir_Invoice_${invoiceNo}.pdf`);
-                    
-                } catch (error) {
-                    console.error('Error generating PDF:', error);
-                    alert('Error generating PDF. Please try again or use the Print function instead.');
-                } finally {
-                    generatePdfBtn.innerHTML = originalText;
-                    generatePdfBtnMobile.innerHTML = originalTextMobile;
-                    generatePdfBtn.classList.remove('btn-loading');
-                    generatePdfBtnMobile.classList.remove('btn-loading');
-                    generatePdfBtn.disabled = false;
-                    generatePdfBtnMobile.disabled = false;
-                }
+                }, 500);
             }
             
             function resetForm() {
@@ -1619,4 +1648,4 @@
         });
     </script>
 </body>
-</html>
+                    </html>
