@@ -213,6 +213,8 @@
             overflow: hidden;
             border-top: 3px solid var(--primary-color);
             order: 1;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
         }
         
         @media (min-width: 992px) {
@@ -477,24 +479,39 @@
             border-top: 1px solid var(--light-accent);
         }
         
-        .watermark {
+        .watermark-img {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%) rotate(-45deg);
-            opacity: 0.025;
+            opacity: 0.03;
             z-index: 0;
             pointer-events: none;
             width: 350px;
             height: 350px;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200"><text x="50%" y="50%" text-anchor="middle" dy=".3em" fill="%238B4513" font-family="Inter, sans-serif" font-weight="bold" font-size="24">Urban Kutir</text></svg>');
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
+            object-fit: contain;
+        }
+        
+        .watermark-fallback {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            opacity: 0.02;
+            z-index: 0;
+            pointer-events: none;
+            width: 350px;
+            height: 350px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 120px;
+            color: var(--primary-color);
         }
         
         @media (max-width: 768px) {
-            .watermark {
+            .watermark-img,
+            .watermark-fallback {
                 width: 200px;
                 height: 200px;
             }
@@ -689,96 +706,93 @@
             max-width: 110px;
         }
         
-        .print-logo {
-            display: none;
-            margin-bottom: 15px;
-            text-align: center;
-        }
-        
+        /* Enhanced Print Styles */
         @media print {
-            body * {
-                visibility: hidden;
-                margin: 0;
-                padding: 0;
+            body {
+                background: white !important;
+                padding: 0 !important;
+                margin: 0 !important;
             }
             
-            .preview-panel, .preview-panel * {
-                visibility: visible;
+            .container {
+                max-width: none !important;
+                margin: 0 !important;
+                gap: 0 !important;
+            }
+            
+            header, .editor-panel, footer, .mobile-controls, .desktop-controls,
+            .print-hide {
+                display: none !important;
             }
             
             .preview-panel {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
-                height: auto;
-                box-shadow: none;
-                border: none;
-                margin: 0;
-                padding: 20px;
-                page-break-after: always;
+                box-shadow: none !important;
+                border: none !important;
+                padding: 15px !important;
+                margin: 0 !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                border-radius: 0 !important;
+                position: static !important;
+                break-inside: avoid;
+                page-break-inside: avoid;
             }
             
-            .watermark {
-                opacity: 0.05;
-                width: 400px;
-                height: 400px;
+            .watermark-img, .watermark-fallback {
+                opacity: 0.04 !important;
+                width: 400px !important;
+                height: 400px !important;
             }
             
-            .controls, .editor-panel, footer, header, .mobile-controls, .btn {
-                display: none;
+            .invoice-table, .address-content, .invoice-meta p {
+                font-size: 11pt !important;
             }
             
-            .print-only {
-                display: block;
-                text-align: center;
-                margin-bottom: 12px;
-                font-size: 10px;
-                color: var(--text-light);
+            .invoice-title {
+                font-size: 20pt !important;
             }
             
-            .print-logo {
-                display: block;
-                margin-bottom: 20px;
-                text-align: center;
-            }
-            
-            .print-logo-content {
-                display: inline-block;
-                text-align: center;
-                margin: 0 auto;
-            }
-            
-            .print-logo-text {
-                font-weight: bold;
-                font-size: 18px;
-                color: var(--primary-dark);
-                margin-top: 5px;
-            }
-            
-            .invoice-table {
-                font-size: 11pt;
-            }
-            
-            .address-content, .invoice-meta p {
-                font-size: 11pt;
-            }
-            
-            .summary-row {
-                font-size: 11pt;
+            .address-title, .signature-name {
+                font-size: 12pt !important;
             }
             
             .summary-row.total {
-                font-size: 12pt;
+                font-size: 13pt !important;
             }
             
-            .invoice-footer {
-                font-size: 11pt;
+            .print-only {
+                display: block !important;
+                text-align: center;
+                margin-bottom: 15px;
+                font-size: 10pt;
+                color: var(--text-light);
             }
             
-            @page {
-                margin: 15mm;
-                size: A4;
+            /* Ensure colors print correctly */
+            .address-box, .company-gst-box, .invoice-table th {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                background-color: var(--lighter-accent) !important;
+            }
+            
+            .summary-row.total {
+                color: var(--primary-dark) !important;
+            }
+            
+            /* Avoid page breaks inside critical sections */
+            .invoice-header, .invoice-addresses, .authorization-section {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+            
+            .invoice-table {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+            
+            .invoice-summary {
+                break-inside: avoid;
+                page-break-inside: avoid;
             }
         }
         
@@ -817,9 +831,9 @@
         <header>
             <div class="logo-container">
                 <div class="logo">
-                    <img src="urbankutir.png" alt="Urban Kutir Logo" class="logo-img" id="logoImage"
-                         onerror="document.getElementById('logo-fallback').style.display='flex'; this.style.display='none'">
-                    <div id="logo-fallback" class="logo-fallback" style="display: none;">
+                    <img src="urbankutir.png" alt="Urban Kutir Logo" class="logo-img" id="main-logo"
+                         onerror="this.style.display='none'; document.getElementById('main-logo-fallback').style.display='flex';">
+                    <div id="main-logo-fallback" class="logo-fallback" style="display: none;">
                         <i class="fas fa-home"></i>
                     </div>
                 </div>
@@ -971,13 +985,11 @@
             </div>
             
             <div class="preview-panel compact-panel" id="invoicePreview">
-                <div class="watermark"></div>
-                
-                <div class="print-logo">
-                    <div class="print-logo-content">
-                        <div style="font-size: 24px; font-weight: bold; color: var(--primary-dark);">Urban Kutir</div>
-                        <div style="font-size: 14px; color: var(--text-light); margin-top: 5px;">Premium Home Solutions & Interior Design</div>
-                    </div>
+                <!-- Watermark for PDF/Print -->
+                <img id="watermark-img" src="urbankutir.png" alt="Watermark" class="watermark-img"
+                     onerror="this.style.display='none'; document.getElementById('watermark-fallback').style.display='flex';">
+                <div id="watermark-fallback" class="watermark-fallback" style="display: none;">
+                    <i class="fas fa-home"></i>
                 </div>
                 
                 <div class="print-only">
@@ -1098,7 +1110,7 @@
             </div>
         </div>
         
-        <footer>
+        <footer class="print-hide">
             <p>Urban Kutir Professional Invoice System &copy; 2025 | GST No: 19AAHFU6863E1ZR</p>
         </footer>
     </div>
@@ -1118,20 +1130,20 @@
             const formattedDueDate = dueDate.toISOString().split('T')[0];
             document.getElementById('dueDate').value = formattedDueDate;
             
-            // Invoice items array
+            // Initialize items array
             let items = [
                 { 
                     slNo: 1, 
-                    name: "Sample Product", 
-                    hsnCode: "9403", 
+                    name: "", 
+                    hsnCode: "", 
                     qty: 1, 
-                    price: 1000, 
+                    price: 0, 
                     unit: "Pcs",
-                    total: 1000 
+                    total: 0 
                 }
             ];
             
-            // DOM elements
+            // DOM Elements
             const itemsContainer = document.getElementById('itemsContainer');
             const previewItems = document.getElementById('previewItems');
             const addItemBtn = document.getElementById('addItemBtn');
@@ -1145,46 +1157,23 @@
             const generatePdfBtnMobile = document.getElementById('generatePdfMobile');
             const resetFormBtnMobile = document.getElementById('resetFormMobile');
             
-            // Initialize watermark with logo or fallback
-            function initializeWatermark() {
-                const watermark = document.querySelector('.watermark');
-                const logoImg = document.getElementById('logoImage');
-                
-                // Create a base64 watermark as fallback
-                const fallbackWatermark = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200"><text x="50%" y="50%" text-anchor="middle" dy=".3em" fill="%238B4513" font-family="Inter, sans-serif" font-weight="bold" font-size="24">Urban Kutir</text></svg>';
-                
-                // Try to use the actual logo for watermark
-                if (logoImg && logoImg.src) {
-                    // Create a canvas to generate a watermark from the logo
-                    const canvas = document.createElement('canvas');
-                    const ctx = canvas.getContext('2d');
-                    const img = new Image();
-                    
-                    img.onload = function() {
-                        canvas.width = img.width;
-                        canvas.height = img.height;
-                        ctx.drawImage(img, 0, 0);
-                        
-                        // Convert to data URL for watermark
-                        const dataURL = canvas.toDataURL('image/png');
-                        watermark.style.backgroundImage = `url(${dataURL})`;
-                    };
-                    
-                    img.onerror = function() {
-                        // Use fallback if logo fails to load
-                        watermark.style.backgroundImage = `url(${fallbackWatermark})`;
-                    };
-                    
-                    img.src = logoImg.src;
-                    img.crossOrigin = "anonymous";
-                } else {
-                    // Use fallback watermark
-                    watermark.style.backgroundImage = `url(${fallbackWatermark})`;
+            // Ensure watermark image is loaded
+            function preloadWatermark() {
+                const watermarkImg = document.getElementById('watermark-img');
+                if (watermarkImg.complete && watermarkImg.naturalWidth !== 0) {
+                    // Watermark is already loaded
+                    return;
                 }
+                
+                // Set up error handling for watermark
+                watermarkImg.onerror = function() {
+                    this.style.display = 'none';
+                    document.getElementById('watermark-fallback').style.display = 'flex';
+                };
             }
             
-            // Initialize after page loads
-            setTimeout(initializeWatermark, 500);
+            // Call after a short delay to ensure DOM is ready
+            setTimeout(preloadWatermark, 500);
             
             // Render items in editor
             function renderItems() {
@@ -1215,6 +1204,7 @@
                         const index = parseInt(this.getAttribute('data-index'));
                         if (items.length > 1) {
                             items.splice(index, 1);
+                            // Reassign serial numbers
                             items.forEach((item, idx) => item.slNo = idx + 1);
                             renderItems();
                             updatePreview();
@@ -1222,7 +1212,7 @@
                     });
                 });
                 
-                // Add event listeners for quantity and price inputs
+                // Add event listeners for quantity and price changes
                 document.querySelectorAll('.item-qty, .item-price').forEach(input => {
                     input.addEventListener('input', function() {
                         const row = this.closest('tr');
@@ -1236,6 +1226,7 @@
                         items[sno].price = price;
                         items[sno].total = total;
                         
+                        // Update other fields
                         items[sno].name = row.querySelector('.item-name').value;
                         items[sno].hsnCode = row.querySelector('.item-hsn').value;
                         items[sno].unit = row.querySelector('.item-unit').value;
@@ -1244,7 +1235,7 @@
                     });
                 });
                 
-                // Add event listeners for name, HSN, and unit inputs
+                // Add event listeners for other fields
                 document.querySelectorAll('.item-name, .item-hsn, .item-unit').forEach(input => {
                     input.addEventListener('input', function() {
                         const row = this.closest('tr');
@@ -1295,7 +1286,7 @@
                 });
             }
             
-            // Format currency
+            // Format currency with Indian numbering system
             function formatCurrency(amount, withDecimals = false) {
                 if (withDecimals) {
                     return amount.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2});
@@ -1303,7 +1294,7 @@
                 return amount.toLocaleString('en-IN');
             }
             
-            // Convert number to words
+            // Convert number to words for amount in words
             function numberToWords(num) {
                 if (num === 0) return 'ZERO';
                 
@@ -1352,13 +1343,14 @@
                 return words.trim() || 'ZERO';
             }
             
-            // Update preview with current data
+            // Update the preview panel
             function updatePreview() {
-                // Update invoice details
+                // Update invoice number
                 const invoiceNo = document.getElementById('invoiceNo').value;
                 document.getElementById('previewInvoiceNo').textContent = invoiceNo || '[Invoice Number]';
                 document.getElementById('previewInvoiceNo').className = invoiceNo ? '' : 'empty-state';
                 
+                // Update dates
                 const invoiceDate = document.getElementById('invoiceDate').value;
                 document.getElementById('previewDate').textContent = invoiceDate ? formatDate(invoiceDate) : '[Date]';
                 document.getElementById('previewDate').className = invoiceDate ? '' : 'empty-state';
@@ -1367,7 +1359,7 @@
                 document.getElementById('previewDueDate').textContent = dueDate ? formatDate(dueDate) : '[Due Date]';
                 document.getElementById('previewDueDate').className = dueDate ? '' : 'empty-state';
                 
-                // Update client information
+                // Update client info
                 const clientName = document.getElementById('clientName').value;
                 const clientAddress = document.getElementById('clientAddress').value;
                 const clientGst = document.getElementById('clientGst').value;
@@ -1385,17 +1377,13 @@
                     if (clientName.trim()) clientHTML += clientName + '<br>';
                     if (clientAddress.trim()) clientHTML += clientAddress.replace(/\n/g, '<br>');
                     
-                    document.getElementById('previewClient').innerHTML = clientHTML + 
-                        (clientGst.trim() ? `<div style="margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--accent-color);">
-                            <strong>GSTIN:</strong> <span id="previewClientGstNumber">${clientGst}</span>
-                        </div>` : '');
-                    
+                    document.getElementById('previewClient').innerHTML = clientHTML;
                     document.getElementById('previewClient').querySelectorAll('.empty-state').forEach(el => el.remove());
                 } else {
                     document.getElementById('previewClient').innerHTML = '<div class="empty-state">[Client Information]</div>';
                 }
                 
-                // Update delivery information
+                // Update delivery info
                 const deliveryAddress = document.getElementById('deliveryAddress').value;
                 const phoneNumber = document.getElementById('phoneNumber').value;
                 
@@ -1420,7 +1408,7 @@
                 const roundOff = parseFloat(document.getElementById('roundOff').value) || 0;
                 const totalAmount = taxableValue + (taxAmount * 2) + roundOff;
                 
-                // Update totals in preview
+                // Update summary
                 document.getElementById('previewTaxable').textContent = formatCurrency(taxableValue, true);
                 document.getElementById('previewTaxRate').textContent = taxRate;
                 document.getElementById('previewSgstRate').textContent = taxRate;
@@ -1447,7 +1435,7 @@
                 }
             }
             
-            // Format date for display
+            // Format date as dd/mm/yyyy
             function formatDate(dateString) {
                 if (!dateString) return '';
                 const date = new Date(dateString);
@@ -1473,26 +1461,25 @@
                 updatePreview();
             });
             
-            // Update preview button
+            // Update invoice preview
             updateInvoiceBtn.addEventListener('click', updatePreview);
             
-            // Print invoice function
+            // Print function
             function printInvoice() {
-                // Show print logo for print output
-                const printLogo = document.querySelector('.print-logo');
-                printLogo.style.display = 'block';
+                // Ensure preview is updated before printing
+                updatePreview();
                 
-                // Trigger print
-                window.print();
-                
-                // Hide print logo after printing
+                // Brief delay to ensure DOM updates
                 setTimeout(() => {
-                    printLogo.style.display = 'none';
-                }, 1000);
+                    window.print();
+                }, 100);
             }
             
             // Generate PDF function
-            async function generatePdf() {
+            function generatePdf() {
+                // Ensure preview is updated before generating PDF
+                updatePreview();
+                
                 const { jsPDF } = window.jspdf;
                 const doc = new jsPDF('p', 'pt', 'a4');
                 const invoiceElement = document.getElementById('invoicePreview');
@@ -1505,67 +1492,59 @@
                 generatePdfBtn.disabled = true;
                 generatePdfBtnMobile.disabled = true;
                 
-                try {
-                    // Show print logo in PDF
-                    const printLogo = document.querySelector('.print-logo');
-                    printLogo.style.display = 'block';
-                    
-                    // Ensure watermark is visible
-                    const watermark = document.querySelector('.watermark');
-                    watermark.style.opacity = '0.05';
-                    
-                    // Generate PDF with html2canvas
-                    const canvas = await html2canvas(invoiceElement, {
-                        scale: 2,
-                        useCORS: true,
-                        logging: false,
-                        backgroundColor: '#ffffff',
-                        allowTaint: true,
-                        onclone: function(clonedDoc) {
-                            // Ensure watermark is visible in cloned document
-                            const clonedWatermark = clonedDoc.querySelector('.watermark');
-                            if (clonedWatermark) {
-                                clonedWatermark.style.opacity = '0.05';
-                            }
-                            
-                            // Show print logo in cloned document
-                            const clonedPrintLogo = clonedDoc.querySelector('.print-logo');
-                            if (clonedPrintLogo) {
-                                clonedPrintLogo.style.display = 'block';
-                            }
+                // Configure html2canvas for better rendering
+                const options = {
+                    scale: 2,
+                    useCORS: true,
+                    logging: false,
+                    backgroundColor: '#ffffff',
+                    allowTaint: true,
+                    imageTimeout: 15000,
+                    onclone: function(clonedDoc) {
+                        // Ensure watermark is visible in cloned document
+                        const watermark = clonedDoc.getElementById('watermark-img');
+                        const fallback = clonedDoc.getElementById('watermark-fallback');
+                        if (watermark && watermark.complete && watermark.naturalWidth > 0) {
+                            watermark.style.opacity = '0.04';
+                        } else if (fallback) {
+                            fallback.style.display = 'flex';
+                            fallback.style.opacity = '0.04';
                         }
-                    });
-                    
+                    }
+                };
+                
+                // Generate PDF
+                html2canvas(invoiceElement, options).then(canvas => {
                     const imgData = canvas.toDataURL('image/png');
-                    const imgWidth = 595;
+                    const imgWidth = 595; // A4 width in points
                     const imgHeight = (canvas.height * imgWidth) / canvas.width;
                     
+                    // Add image to PDF
                     doc.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+                    
+                    // Save PDF
                     const invoiceNo = document.getElementById('invoiceNo').value || 'Draft';
                     doc.save(`UrbanKutir_Invoice_${invoiceNo}.pdf`);
                     
-                    // Hide print logo after PDF generation
-                    printLogo.style.display = 'none';
-                    
-                } catch (error) {
-                    console.error('Error generating PDF:', error);
-                    alert('Error generating PDF. Please try again.');
-                } finally {
                     // Restore button state
                     generatePdfBtn.innerHTML = originalText;
                     generatePdfBtnMobile.innerHTML = originalTextMobile;
                     generatePdfBtn.disabled = false;
                     generatePdfBtnMobile.disabled = false;
-                    
-                    // Hide print logo
-                    const printLogo = document.querySelector('.print-logo');
-                    printLogo.style.display = 'none';
-                }
+                }).catch(error => {
+                    console.error('Error generating PDF:', error);
+                    generatePdfBtn.innerHTML = originalText;
+                    generatePdfBtnMobile.innerHTML = originalTextMobile;
+                    generatePdfBtn.disabled = false;
+                    generatePdfBtnMobile.disabled = false;
+                    alert('Error generating PDF. Please try again or use the print function.');
+                });
             }
             
-            // Reset form
+            // Reset form function
             function resetForm() {
                 if (confirm('Are you sure you want to reset the form? All data will be cleared.')) {
+                    // Clear form fields
                     document.getElementById('invoiceNo').value = '';
                     document.getElementById('invoiceDate').value = formattedToday;
                     document.getElementById('dueDate').value = formattedDueDate;
@@ -1579,52 +1558,50 @@
                     document.getElementById('roundOff').value = '0';
                     document.getElementById('notes').value = '';
                     
+                    // Reset items
                     items = [
                         { 
                             slNo: 1, 
-                            name: "Sample Product", 
-                            hsnCode: "9403", 
+                            name: "", 
+                            hsnCode: "", 
                             qty: 1, 
-                            price: 1000, 
+                            price: 0, 
                             unit: "Pcs",
-                            total: 1000 
+                            total: 0 
                         }
                     ];
                     
+                    // Re-render
                     renderItems();
                     updatePreview();
                 }
             }
             
-            // Event listeners for print buttons
+            // Add event listeners
             printInvoiceBtn.addEventListener('click', printInvoice);
             printInvoiceBtnMobile.addEventListener('click', printInvoice);
             
-            // Event listeners for PDF buttons
             generatePdfBtn.addEventListener('click', generatePdf);
             generatePdfBtnMobile.addEventListener('click', generatePdf);
             
-            // Event listeners for reset buttons
             resetFormBtn.addEventListener('click', resetForm);
             resetFormBtnMobile.addEventListener('click', resetForm);
             
-            // Initialize with sample data
+            // Add input event listeners for real-time preview updates
+            const previewInputs = [
+                'invoiceNo', 'invoiceDate', 'dueDate', 'clientName', 'clientGst',
+                'clientAddress', 'deliveryAddress', 'phoneNumber', 'taxRate',
+                'roundOff', 'notes'
+            ];
+            
+            previewInputs.forEach(inputId => {
+                document.getElementById(inputId).addEventListener('input', updatePreview);
+            });
+            
+            // Initialize
             renderItems();
             updatePreview();
-            
-            // Auto-update preview when inputs change
-            document.getElementById('invoiceNo').addEventListener('input', updatePreview);
-            document.getElementById('invoiceDate').addEventListener('input', updatePreview);
-            document.getElementById('dueDate').addEventListener('input', updatePreview);
-            document.getElementById('clientName').addEventListener('input', updatePreview);
-            document.getElementById('clientGst').addEventListener('input', updatePreview);
-            document.getElementById('clientAddress').addEventListener('input', updatePreview);
-            document.getElementById('deliveryAddress').addEventListener('input', updatePreview);
-            document.getElementById('phoneNumber').addEventListener('input', updatePreview);
-            document.getElementById('taxRate').addEventListener('input', updatePreview);
-            document.getElementById('roundOff').addEventListener('input', updatePreview);
-            document.getElementById('notes').addEventListener('input', updatePreview);
         });
     </script>
 </body>
-</html>
+                            </html>
