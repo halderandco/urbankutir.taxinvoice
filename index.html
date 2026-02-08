@@ -482,12 +482,11 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%) rotate(-45deg);
-            opacity: 0.03;
+            opacity: 0.05;
             z-index: 0;
             pointer-events: none;
             width: 350px;
             height: 350px;
-            background-image: url('https://via.placeholder.com/350x350/8B4513/ffffff?text=Urban+Kutir');
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
@@ -690,12 +689,20 @@
         }
         
         @media print {
+            @page {
+                margin: 20mm;
+            }
+            
             body * {
                 visibility: hidden;
+                background: white !important;
+                color: black !important;
             }
             
             .preview-panel, .preview-panel * {
                 visibility: visible;
+                background: white !important;
+                color: black !important;
             }
             
             .preview-panel {
@@ -703,21 +710,26 @@
                 left: 0;
                 top: 0;
                 width: 100%;
+                height: auto;
                 box-shadow: none;
                 border: none;
-                border-radius: 0;
-                padding: 20px;
+                padding: 0;
                 margin: 0;
             }
             
             .watermark {
-                opacity: 0.05;
+                opacity: 0.08 !important;
                 display: block !important;
-                background-image: url('https://via.placeholder.com/350x350/8B4513/ffffff?text=Urban+Kutir') !important;
             }
             
-            .controls, .editor-panel, footer, header, .mobile-controls {
-                display: none;
+            .logo-img {
+                visibility: visible !important;
+                display: block !important;
+            }
+            
+            .controls, .editor-panel, footer, header, .mobile-controls,
+            .btn, .mobile-controls, .company-contact, .logo-fallback {
+                display: none !important;
             }
             
             .print-only {
@@ -728,12 +740,9 @@
                 color: var(--text-light);
             }
             
-            .btn {
-                display: none;
-            }
-            
             .invoice-table {
                 font-size: 11pt;
+                page-break-inside: avoid;
             }
             
             .address-content, .invoice-meta p {
@@ -741,11 +750,11 @@
             }
             
             .authorization-section {
-                margin-top: 40px;
+                page-break-inside: avoid;
             }
             
-            .invoice-footer {
-                margin-top: 40px;
+            .invoice-summary {
+                page-break-inside: avoid;
             }
         }
         
@@ -786,56 +795,40 @@
             height: 100%;
             background: rgba(255, 255, 255, 0.9);
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 9999;
-            flex-direction: column;
-            gap: 20px;
+            display: none;
         }
         
-        .loading-spinner {
+        .spinner {
+            width: 50px;
+            height: 50px;
             border: 4px solid var(--light-accent);
             border-top: 4px solid var(--primary-color);
             border-radius: 50%;
-            width: 50px;
-            height: 50px;
             animation: spin 1s linear infinite;
+            margin-bottom: 20px;
         }
         
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        
-        .print-logo {
-            display: none;
-        }
-        
-        @media print {
-            .print-logo {
-                display: block;
-                text-align: center;
-                margin-bottom: 15px;
-            }
-            
-            .print-logo img {
-                max-width: 120px;
-                height: auto;
-            }
-        }
     </style>
 </head>
 <body>
-    <div class="loading-overlay" id="loadingOverlay" style="display: none;">
-        <div class="loading-spinner"></div>
-        <div style="color: var(--primary-dark); font-weight: 600;">Generating PDF, please wait...</div>
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <p>Generating PDF, please wait...</p>
     </div>
     
     <div class="container">
         <header>
             <div class="logo-container">
                 <div class="logo">
-                    <img src="urbankutir.png" alt="Urban Kutir Logo" class="logo-img" id="mainLogo"
+                    <img src="urbankutir.png" alt="Urban Kutir Logo" class="logo-img" id="companyLogo" 
                          onerror="document.getElementById('logo-fallback').style.display='flex'; this.style.display='none'">
                     <div id="logo-fallback" class="logo-fallback" style="display: none;">
                         <i class="fas fa-home"></i>
@@ -990,10 +983,6 @@
             
             <div class="preview-panel compact-panel" id="invoicePreview">
                 <div class="watermark" id="watermark"></div>
-                
-                <div class="print-logo" id="printLogo">
-                    <img src="urbankutir.png" alt="Urban Kutir Logo" style="max-width: 120px; height: auto;" onerror="this.style.display='none'">
-                </div>
                 
                 <div class="print-only">
                     <p>Generated from Urban Kutir Professional Invoice System</p>
@@ -1154,26 +1143,36 @@
             const clientGstInput = document.getElementById('clientGst');
             const loadingOverlay = document.getElementById('loadingOverlay');
             const watermark = document.getElementById('watermark');
-            const mainLogo = document.getElementById('mainLogo');
+            const companyLogo = document.getElementById('companyLogo');
             
             const printInvoiceBtnMobile = document.getElementById('printInvoiceMobile');
             const generatePdfBtnMobile = document.getElementById('generatePdfMobile');
             const resetFormBtnMobile = document.getElementById('resetFormMobile');
             
-            function updateWatermark() {
-                if (mainLogo.complete && mainLogo.naturalWidth !== 0) {
-                    watermark.style.backgroundImage = `url('${mainLogo.src}')`;
+            // Ensure watermark is properly loaded
+            function ensureWatermark() {
+                if (companyLogo && companyLogo.src) {
+                    watermark.style.backgroundImage = `url('${companyLogo.src}')`;
                 } else {
-                    mainLogo.onload = function() {
-                        watermark.style.backgroundImage = `url('${mainLogo.src}')`;
-                    };
-                    mainLogo.onerror = function() {
-                        watermark.style.backgroundImage = 'url("https://via.placeholder.com/350x350/8B4513/ffffff?text=Urban+Kutir")';
-                    };
+                    // Create a text-based fallback watermark
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    canvas.width = 400;
+                    canvas.height = 400;
+                    
+                    ctx.fillStyle = 'rgba(139, 69, 19, 0.05)';
+                    ctx.font = 'bold 40px Inter';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.translate(200, 200);
+                    ctx.rotate(-45 * Math.PI / 180);
+                    ctx.fillText('URBAN KUTIR', 0, 0);
+                    
+                    watermark.style.backgroundImage = `url(${canvas.toDataURL()})`;
                 }
             }
             
-            updateWatermark();
+            setTimeout(ensureWatermark, 500);
             
             function renderItems() {
                 itemsContainer.innerHTML = '';
@@ -1447,33 +1446,40 @@
             updateInvoiceBtn.addEventListener('click', updatePreview);
             
             function printInvoice() {
-                const originalWatermarkOpacity = watermark.style.opacity;
-                watermark.style.opacity = '0.05';
+                // Ensure watermark is visible for printing
+                watermark.style.opacity = '0.08';
+                ensureWatermark();
                 
-                window.print();
-                
+                // Wait a moment for styles to apply, then print
                 setTimeout(() => {
-                    watermark.style.opacity = originalWatermarkOpacity || '0.03';
-                }, 500);
+                    window.print();
+                    // Reset opacity after printing
+                    setTimeout(() => {
+                        watermark.style.opacity = '0.05';
+                    }, 100);
+                }, 100);
             }
             
             async function generatePdf() {
-                loadingOverlay.style.display = 'flex';
-                
                 const originalText = generatePdfBtn.innerHTML;
                 const originalTextMobile = generatePdfBtnMobile.innerHTML;
                 generatePdfBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
                 generatePdfBtnMobile.innerHTML = '<i class="fas fa-spinner fa-spin"></i> PDF';
                 generatePdfBtn.disabled = true;
                 generatePdfBtnMobile.disabled = true;
+                loadingOverlay.style.display = 'flex';
                 
                 try {
                     const { jsPDF } = window.jspdf;
                     const doc = new jsPDF('p', 'pt', 'a4');
                     const invoiceElement = document.getElementById('invoicePreview');
                     
-                    const originalWatermarkOpacity = watermark.style.opacity;
-                    watermark.style.opacity = '0.05';
+                    // Ensure watermark is properly visible
+                    watermark.style.opacity = '0.08';
+                    ensureWatermark();
+                    
+                    // Add a small delay to ensure watermark is rendered
+                    await new Promise(resolve => setTimeout(resolve, 300));
                     
                     const canvas = await html2canvas(invoiceElement, {
                         scale: 2,
@@ -1482,9 +1488,16 @@
                         backgroundColor: '#ffffff',
                         allowTaint: true,
                         onclone: function(clonedDoc) {
+                            // Ensure the watermark is visible in the cloned document
                             const clonedWatermark = clonedDoc.getElementById('watermark');
                             if (clonedWatermark) {
-                                clonedWatermark.style.opacity = '0.05';
+                                clonedWatermark.style.opacity = '0.08';
+                                clonedWatermark.style.display = 'block';
+                            }
+                            // Ensure logo is visible
+                            const clonedLogo = clonedDoc.getElementById('companyLogo');
+                            if (clonedLogo) {
+                                clonedLogo.style.display = 'block';
                             }
                         }
                     });
@@ -1500,7 +1513,7 @@
                     doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
                     heightLeft -= pageHeight;
                     
-                    while (heightLeft >= 0) {
+                    while (heightLeft > 0) {
                         position = heightLeft - imgHeight;
                         doc.addPage();
                         doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
@@ -1510,17 +1523,16 @@
                     const invoiceNo = document.getElementById('invoiceNo').value || 'Draft';
                     doc.save(`UrbanKutir_Invoice_${invoiceNo}.pdf`);
                     
-                    watermark.style.opacity = originalWatermarkOpacity;
-                    
                 } catch (error) {
                     console.error('Error generating PDF:', error);
                     alert('Error generating PDF. Please try again.');
                 } finally {
-                    loadingOverlay.style.display = 'none';
                     generatePdfBtn.innerHTML = originalText;
                     generatePdfBtnMobile.innerHTML = originalTextMobile;
                     generatePdfBtn.disabled = false;
                     generatePdfBtnMobile.disabled = false;
+                    loadingOverlay.style.display = 'none';
+                    watermark.style.opacity = '0.05';
                 }
             }
             
@@ -1565,6 +1577,18 @@
             resetFormBtn.addEventListener('click', resetForm);
             resetFormBtnMobile.addEventListener('click', resetForm);
             
+            // Add keyboard shortcuts
+            document.addEventListener('keydown', function(e) {
+                if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
+                    e.preventDefault();
+                    printInvoice();
+                }
+                if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                    e.preventDefault();
+                    generatePdf();
+                }
+            });
+            
             renderItems();
             updatePreview();
             
@@ -1579,13 +1603,6 @@
             document.getElementById('taxRate').addEventListener('input', updatePreview);
             document.getElementById('roundOff').addEventListener('input', updatePreview);
             document.getElementById('notes').addEventListener('input', updatePreview);
-            
-            document.addEventListener('keydown', function(e) {
-                if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
-                    e.preventDefault();
-                    printInvoice();
-                }
-            });
         });
     </script>
 </body>
