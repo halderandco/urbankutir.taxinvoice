@@ -1563,7 +1563,7 @@
         </div>
         
         <footer class="no-print">
-            <p>Urban Kutir Professional Invoice System &copy; 2025 | GST No: 19AAHFU6863E1ZR</p>
+            <p>Urban Kutir Professional Invoice System &copy; <span id="currentYear">2025</span> | GST No: 19AAHFU6863E1ZR</p>
         </footer>
     </div>
     
@@ -1646,6 +1646,9 @@
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Auto-update year in footer
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+            
             // Set default dates
             const today = new Date();
             const formattedToday = today.toISOString().split('T')[0];
@@ -1780,7 +1783,7 @@
                         ctx.fillStyle = 'white';
                         ctx.font = 'bold 36px Inter';
                         ctx.textAlign = 'center';
-                        ctx.textBaseline = 'middle';
+                            ctx.textBaseline = 'middle';
                         ctx.fillText('UK', 60, 60);
                         
                         logoDataUrl = canvas.toDataURL('image/png');
@@ -2470,7 +2473,7 @@
                             <p style="margin-top: 10px;">This is a computer generated invoice and does not require a physical signature. Subject to Kolkata Jurisdiction.</p>
                             <p style="margin-top: 15px; font-size: 10px; color: #666; font-style: italic; max-width: 600px; margin-left: auto; margin-right: auto;">
                                 This document complies with Indian tax regulations and legal requirements for business invoices. 
-                                Urban Kutir is registered under GST with GSTIN 19AAHFU6863E1ZR.
+                                Urban Kutir &copy; ${new Date().getFullYear()} is registered under GST with GSTIN 19AAHFU6863E1ZR.
                             </p>
                         </div>
                     </div>
