@@ -1358,8 +1358,6 @@
             .address-content {
                 font-size: 10pt !important;
                 line-height: 1.4 !important;
-                page-break-inside: avoid !important;
-                break-inside: avoid !important;
             }
             
             /* Invoice table with controlled pagination */
@@ -1382,9 +1380,6 @@
             .invoice-table thead {
                 display: table-header-group !important;
                 background: var(--light-accent) !important;
-                page-break-inside: avoid !important;
-                break-inside: avoid !important;
-                page-break-after: avoid !important;
             }
             
             .invoice-table th {
@@ -1454,8 +1449,6 @@
                 justify-content: space-between !important;
                 padding: 2mm 0 !important;
                 font-size: 10pt !important;
-                page-break-inside: avoid !important;
-                break-inside: avoid !important;
             }
             
             .summary-row.total {
@@ -1496,8 +1489,6 @@
             .signature-box {
                 text-align: center !important;
                 min-width: 50mm !important;
-                page-break-inside: avoid !important;
-                break-inside: avoid !important;
             }
             
             .signature-line {
@@ -1553,58 +1544,15 @@
             }
             
             /* Handle widows and orphans */
-            p, h1, h2, h3, h4, h5, h6, div, span, td, th {
-                widows: 4 !important;
-                orphans: 4 !important;
-                page-break-inside: avoid !important;
-                break-inside: avoid !important;
+            p, h1, h2, h3, h4, h5, h6 {
+                widows: 3;
+                orphans: 3;
             }
             
             /* Prevent empty space at bottom of page */
             .preview-panel:last-child {
                 page-break-after: avoid !important;
                 break-after: avoid !important;
-            }
-            
-            /* Prevent page breaks inside critical content blocks */
-            .address-content,
-            .signature-box,
-            .summary-row,
-            .authorization-section,
-            .invoice-footer,
-            .invoice-header,
-            .invoice-addresses,
-            .invoice-summary,
-            #previewNotes,
-            .company-gst-box,
-            .company-contact {
-                page-break-inside: avoid !important;
-                break-inside: avoid !important;
-            }
-            
-            /* Keep table rows together when possible */
-            .invoice-table tbody tr {
-                page-break-inside: avoid !important;
-                break-inside: avoid !important;
-            }
-            
-            /* Ensure paragraphs don't break across pages */
-            p, .address-content p, .invoice-meta p {
-                page-break-inside: avoid !important;
-                break-inside: avoid !important;
-            }
-            
-            /* Prevent breaking inside text blocks */
-            .text-block, .content-block, .invoice-section {
-                page-break-inside: avoid !important;
-                break-inside: avoid !important;
-            }
-            
-            /* Keep authorization signature with its label */
-            .signature-box,
-            .authorization-section > div:first-child {
-                page-break-inside: avoid !important;
-                break-inside: avoid !important;
             }
         }
         
@@ -1613,8 +1561,6 @@
             /* Base styles that apply to both screen and print preview */
             font-family: 'Inter', sans-serif !important;
             color: var(--text-dark) !important;
-            page-break-inside: avoid !important;
-            break-inside: avoid !important;
         }
         
         /* Ensure print preview shows proper pagination with 20mm margins */
@@ -2621,6 +2567,9 @@
                             color: #2c1810;
                             line-height: 1.5;
                             position: relative;
+                            -webkit-print-color-adjust: exact !important;
+                            print-color-adjust: exact !important;
+                            color-adjust: exact !important;
                         }
                         
                         .print-watermark {
@@ -2727,8 +2676,8 @@
                             position: relative;
                             z-index: 1;
                             box-shadow: 0 2px 8px rgba(139, 69, 19, 0.05);
-                            page-break-inside: auto;
-                            break-inside: auto;
+                            page-break-inside: avoid !important;
+                            break-inside: avoid !important;
                         }
                         
                         .print-table thead {
@@ -2822,19 +2771,43 @@
                             padding-top: 50px;
                         }
                         
-                        /* Prevent page breaks inside text blocks */
-                        .text-block, .content-block, .address-block, .summary-block, .authorization-block {
-                            page-break-inside: avoid !important;
-                            break-inside: avoid !important;
+                        /* PDF-specific pagination rules */
+                        * {
+                            -webkit-print-color-adjust: exact !important;
+                            print-color-adjust: exact !important;
+                            color-adjust: exact !important;
                         }
                         
                         p, h1, h2, h3, h4, h5, h6, div, span, td, th {
                             widows: 4 !important;
                             orphans: 4 !important;
+                            page-break-inside: avoid !important;
+                            break-inside: avoid !important;
+                        }
+                        
+                        /* Prevent page breaks inside critical content blocks */
+                        .print-address-box,
+                        .print-summary,
+                        .print-authorization,
+                        .print-signature,
+                        .print-header,
+                        .print-addresses,
+                        .print-table tr,
+                        .print-summary-row,
+                        .print-meta p,
+                        .print-company-info h1 {
+                            page-break-inside: avoid !important;
+                            break-inside: avoid !important;
                         }
                         
                         /* Keep authorization section together */
-                        .print-authorization, .print-signature {
+                        .print-authorization {
+                            page-break-before: avoid !important;
+                            break-before: avoid !important;
+                        }
+                        
+                        /* Prevent breaking inside text paragraphs */
+                        .text-block {
                             page-break-inside: avoid !important;
                             break-inside: avoid !important;
                         }
@@ -2875,11 +2848,11 @@
                         <div class="print-addresses">
                             <div class="print-address-box">
                                 <strong style="color: #5a3921; font-size: 15px; display: block; margin-bottom: 10px;">BILLED TO:</strong>
-                                <div style="margin-top: 8px; font-size: 12.5px; color: #5a3921; line-height: 1.6;">${clientHTML || '[Client Information]'}</div>
+                                <div style="margin-top: 8px; font-size: 12.5px; color: #5a3921; line-height: 1.6; page-break-inside: avoid !important; break-inside: avoid !important;">${clientHTML || '[Client Information]'}</div>
                             </div>
                             <div class="print-address-box">
                                 <strong style="color: #5a3921; font-size: 15px; display: block; margin-bottom: 10px;">SHIP TO:</strong>
-                                <div style="margin-top: 8px; font-size: 12.5px; color: #5a3921; line-height: 1.6;">${deliveryHTML || '[Delivery Address]'}</div>
+                                <div style="margin-top: 8px; font-size: 12.5px; color: #5a3921; line-height: 1.6; page-break-inside: avoid !important; break-inside: avoid !important;">${deliveryHTML || '[Delivery Address]'}</div>
                             </div>
                         </div>
                         
@@ -2931,10 +2904,10 @@
                         
                         <div class="print-authorization">
                             <div style="flex: 1;">
-                                ${showPaymentTerms && paymentTerms.trim() ? `<p style="font-size: 12px; color: #5a3921; margin-bottom: 8px;"><strong>Payment Terms:</strong> ${paymentTerms}</p>` : ''}
-                                ${showDeliveryTerms && deliveryTerms.trim() ? `<p style="font-size: 12px; color: #5a3921; margin-bottom: 8px;"><strong>Delivery:</strong> ${deliveryTerms}</p>` : ''}
-                                <p style="font-size: 12px; color: #5a3921; margin-bottom: 8px;"><strong>Bank Details:</strong> State Bank of India | A/C: 123456789012 | IFSC: SBIN0001234</p>
-                                <p style="font-size: 12px; color: #5a3921;"><strong>PAN:</strong> AAHFU6863E</p>
+                                ${showPaymentTerms && paymentTerms.trim() ? `<p style="font-size: 12px; color: #5a3921; margin-bottom: 8px; page-break-inside: avoid !important; break-inside: avoid !important;"><strong>Payment Terms:</strong> ${paymentTerms}</p>` : ''}
+                                ${showDeliveryTerms && deliveryTerms.trim() ? `<p style="font-size: 12px; color: #5a3921; margin-bottom: 8px; page-break-inside: avoid !important; break-inside: avoid !important;"><strong>Delivery:</strong> ${deliveryTerms}</p>` : ''}
+                                <p style="font-size: 12px; color: #5a3921; margin-bottom: 8px; page-break-inside: avoid !important; break-inside: avoid !important;"><strong>Bank Details:</strong> State Bank of India | A/C: 123456789012 | IFSC: SBIN0001234</p>
+                                <p style="font-size: 12px; color: #5a3921; page-break-inside: avoid !important; break-inside: avoid !important;"><strong>PAN:</strong> AAHFU6863E</p>
                             </div>
                             <div class="print-signature">
                                 <div class="print-signature-line"></div>
@@ -2945,9 +2918,9 @@
                         </div>
                         
                         <div style="text-align: center; margin-top: 50px; padding-top: 25px; border-top: 1.5px solid #f0e6d6; font-size: 11px; color: #8B4513; position: relative; z-index: 1; page-break-inside: avoid !important; break-inside: avoid !important;">
-                            <p style="font-weight: 500;"><strong>TOTAL AMOUNT:</strong> RUPEES ${amountWords} ONLY.</p>
-                            <p style="margin-top: 10px;">This is a computer generated invoice and does not require a physical signature. Subject to Kolkata Jurisdiction.</p>
-                            <p style="margin-top: 15px; font-size: 10px; color: #666; font-style: italic; max-width: 600px; margin-left: auto; margin-right: auto;">
+                            <p style="font-weight: 500; page-break-inside: avoid !important; break-inside: avoid !important;"><strong>TOTAL AMOUNT:</strong> RUPEES ${amountWords} ONLY.</p>
+                            <p style="margin-top: 10px; page-break-inside: avoid !important; break-inside: avoid !important;">This is a computer generated invoice and does not require a physical signature. Subject to Kolkata Jurisdiction.</p>
+                            <p style="margin-top: 15px; font-size: 10px; color: #666; font-style: italic; max-width: 600px; margin-left: auto; margin-right: auto; page-break-inside: avoid !important; break-inside: avoid !important;">
                                 This document complies with Indian tax regulations and legal requirements for business invoices. 
                                 Urban Kutir &copy; ${new Date().getFullYear()} is registered under GST with GSTIN 19AAHFU6863E1ZR.
                             </p>
