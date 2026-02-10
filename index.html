@@ -1005,7 +1005,7 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             max-width: 210mm;
             margin: 0 auto;
-            padding: 25mm;
+            padding: 20mm;
         }
         
         /* Progress Indicator */
@@ -1213,12 +1213,11 @@
                 opacity: 0 !important;
             }
             
-            /* A4 page setup */
+            /* A4 page setup - STANDARD 20mm MARGINS ON ALL SIDES */
             @page {
                 size: A4 portrait;
-                margin: 15mm 15mm 20mm 15mm;
+                margin: 20mm;
                 marks: crop cross;
-                bleed: 3mm;
                 
                 /* Page counter */
                 @bottom-center {
@@ -1237,9 +1236,9 @@
                 }
             }
             
-            /* First page special margins */
+            /* First page same margins as others */
             @page :first {
-                margin-top: 20mm;
+                margin: 20mm;
                 @top-center {
                     content: "";
                 }
@@ -1295,14 +1294,14 @@
                 break-inside: avoid !important;
             }
             
-            /* Invoice structure for print */
+            /* Invoice structure for print - adjusted for 20mm margins */
             .invoice-header {
                 display: flex !important;
                 flex-direction: row !important;
                 justify-content: space-between !important;
                 align-items: flex-start !important;
-                margin-bottom: 8mm !important;
-                padding-bottom: 4mm !important;
+                margin-bottom: 10mm !important;
+                padding-bottom: 5mm !important;
                 border-bottom: 1.5pt solid var(--accent-color) !important;
                 page-break-inside: avoid !important;
                 break-inside: avoid !important;
@@ -1314,7 +1313,7 @@
                 font-size: 22pt !important;
                 color: var(--primary-dark) !important;
                 font-weight: 700 !important;
-                margin-bottom: 3mm !important;
+                margin-bottom: 4mm !important;
                 letter-spacing: 1pt !important;
             }
             
@@ -1333,7 +1332,7 @@
                 display: flex !important;
                 flex-direction: row !important;
                 justify-content: space-between !important;
-                margin-bottom: 8mm !important;
+                margin-bottom: 10mm !important;
                 page-break-inside: avoid !important;
                 break-inside: avoid !important;
                 gap: 10mm !important;
@@ -1342,7 +1341,7 @@
             .address-box {
                 flex: 1 !important;
                 background: #fcfaf7 !important;
-                padding: 4mm !important;
+                padding: 5mm !important;
                 border-left: 3pt solid var(--accent-color) !important;
                 border-radius: 2pt !important;
                 page-break-inside: avoid !important;
@@ -1352,7 +1351,7 @@
             .address-title {
                 font-size: 11pt !important;
                 font-weight: 700 !important;
-                margin-bottom: 2mm !important;
+                margin-bottom: 3mm !important;
                 color: var(--primary-dark) !important;
             }
             
@@ -1371,7 +1370,7 @@
             .invoice-table {
                 width: 100% !important;
                 border-collapse: collapse !important;
-                margin: 6mm 0 8mm 0 !important;
+                margin: 8mm 0 10mm 0 !important;
                 font-size: 10pt !important;
                 page-break-inside: auto !important;
                 break-inside: auto !important;
@@ -1433,9 +1432,9 @@
                 max-width: 70mm !important;
                 margin-left: auto !important;
                 margin-right: 0 !important;
-                margin-top: 6mm !important;
-                margin-bottom: 8mm !important;
-                padding: 4mm !important;
+                margin-top: 8mm !important;
+                margin-bottom: 10mm !important;
+                padding: 5mm !important;
                 background: #fcfaf7 !important;
                 border: 0.5pt solid var(--border-color) !important;
                 border-radius: 2pt !important;
@@ -1448,7 +1447,7 @@
             .summary-row {
                 display: flex !important;
                 justify-content: space-between !important;
-                padding: 1.5mm 0 !important;
+                padding: 2mm 0 !important;
                 font-size: 10pt !important;
             }
             
@@ -1456,15 +1455,15 @@
                 font-size: 11pt !important;
                 font-weight: 700 !important;
                 border-top: 1pt solid var(--primary-dark) !important;
-                margin-top: 2mm !important;
-                padding-top: 2.5mm !important;
+                margin-top: 3mm !important;
+                padding-top: 3mm !important;
             }
             
             /* Notes section */
             #previewNotes {
-                margin-top: 4mm !important;
-                margin-bottom: 6mm !important;
-                padding: 3mm !important;
+                margin-top: 5mm !important;
+                margin-bottom: 8mm !important;
+                padding: 4mm !important;
                 background: #f9f5f0 !important;
                 border-left: 3pt solid var(--accent-color) !important;
                 font-size: 9.5pt !important;
@@ -1478,8 +1477,8 @@
                 flex-direction: row !important;
                 justify-content: space-between !important;
                 align-items: flex-end !important;
-                margin-top: 10mm !important;
-                padding-top: 6mm !important;
+                margin-top: 12mm !important;
+                padding-top: 8mm !important;
                 border-top: 1pt dashed var(--accent-color) !important;
                 page-break-inside: avoid !important;
                 break-inside: avoid !important;
@@ -1495,7 +1494,7 @@
             .signature-line {
                 width: 60mm !important;
                 border-bottom: 1pt solid var(--primary-dark) !important;
-                margin: 0 auto 2mm !important;
+                margin: 0 auto 3mm !important;
                 padding-top: 15mm !important;
             }
             
@@ -1510,8 +1509,8 @@
             
             /* Footer - keep with authorization when possible */
             .invoice-footer {
-                margin-top: 8mm !important;
-                padding-top: 4mm !important;
+                margin-top: 10mm !important;
+                padding-top: 5mm !important;
                 border-top: 0.5pt solid var(--light-accent) !important;
                 text-align: center !important;
                 font-size: 9pt !important;
@@ -1564,12 +1563,12 @@
             color: var(--text-dark) !important;
         }
         
-        /* Ensure print preview shows proper pagination */
+        /* Ensure print preview shows proper pagination with 20mm margins */
         @media screen and (max-width: 1199px) {
             .print-preview-content {
                 width: 210mm !important;
                 min-height: 297mm !important;
-                padding: 15mm !important;
+                padding: 20mm !important;
                 box-shadow: 0 0 20px rgba(0,0,0,0.1) !important;
                 margin: 20px auto !important;
                 background: white !important;
@@ -2978,7 +2977,7 @@
                             <style>
                                 @media print {
                                     @page {
-                                        margin: 15mm;
+                                        margin: 20mm;
                                         size: A4;
                                     }
                                     body {
@@ -3070,7 +3069,7 @@
                             <style>
                                 @media print {
                                     @page {
-                                        margin: 15mm;
+                                        margin: 20mm;
                                         size: A4;
                                     }
                                     body {
