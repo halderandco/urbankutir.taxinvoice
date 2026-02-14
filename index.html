@@ -2954,24 +2954,79 @@
                 }
             }
             
-            // Direct print function - UPDATED to print the main preview panel
+            // Direct print function
             function directPrint() {
-                exportModal.classList.remove('active');
-                showToast('success', 'Print Started', 'The print dialog has been opened.');
-                
-                const previewPanel = document.getElementById('previewPanel');
-                // Temporarily remove no-print class to allow printing
-                previewPanel.classList.remove('no-print');
-                
                 if (!logoDataUrl) {
                     convertLogoToDataUrl().then(() => {
-                        window.print();
-                        // After print dialog closes, restore class
-                        previewPanel.classList.add('no-print');
+                        executePrint();
                     });
                 } else {
-                    window.print();
-                    previewPanel.classList.add('no-print');
+                    executePrint();
+                }
+                
+                function executePrint() {
+                    const html = generatePrintPreviewHTML();
+                    
+                    const printWindow = window.open('', '_blank');
+                    printWindow.document.write(`
+                        <!DOCTYPE html>
+                        <html>
+                        <head>
+                            <title>Urban Kutir - Invoice ${document.getElementById('invoiceNo').value || 'Draft'}</title>
+                            <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+                            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+                            <style>
+                                @media print {
+                                    @page {
+                                        margin: 15mm;
+                                        size: A4;
+                                    }
+                                    body {
+                                        -webkit-print-color-adjust: exact;
+                                        print-color-adjust: exact;
+                                    }
+                                    /* Ensure no page breaks inside critical sections */
+                                    .print-addresses, .print-header, .print-summary, .print-authorization, .print-footer {
+                                        page-break-inside: avoid !important;
+                                        break-inside: avoid !important;
+                                    }
+                                    .print-table tr {
+                                        page-break-inside: avoid !important;
+                                        break-inside: avoid !important;
+                                    }
+                                    .print-table thead {
+                                        display: table-header-group;
+                                    }
+                                    .print-table tbody {
+                                        page-break-inside: auto;
+                                    }
+                                    p, h1, h2, h3, h4, h5, h6 {
+                                        widows: 3;
+                                        orphans: 3;
+                                    }
+                                }
+                                body {
+                                    margin: 0;
+                                    padding: 0;
+                                    font-family: 'Inter', sans-serif;
+                                }
+                            </style>
+                        </head>
+                        <body>
+                            ${html}
+                            <script>
+                                window.onload = function() {
+                                    window.print();
+                                    setTimeout(() => window.close(), 500);
+                                };
+                            <\/script>
+                        </body>
+                        </html>
+                    `);
+                    printWindow.document.close();
+                    
+                    exportModal.classList.remove('active');
+                    showToast('success', 'Print Started', 'The print dialog has been opened.');
                 }
             }
             
@@ -3040,6 +3095,25 @@
                                     body {
                                         -webkit-print-color-adjust: exact;
                                         print-color-adjust: exact;
+                                    }
+                                    /* Ensure no page breaks inside critical sections */
+                                    .print-addresses, .print-header, .print-summary, .print-authorization, .print-footer {
+                                        page-break-inside: avoid !important;
+                                        break-inside: avoid !important;
+                                    }
+                                    .print-table tr {
+                                        page-break-inside: avoid !important;
+                                        break-inside: avoid !important;
+                                    }
+                                    .print-table thead {
+                                        display: table-header-group;
+                                    }
+                                    .print-table tbody {
+                                        page-break-inside: auto;
+                                    }
+                                    p, h1, h2, h3, h4, h5, h6 {
+                                        widows: 3;
+                                        orphans: 3;
                                     }
                                 }
                                 body {
