@@ -1778,8 +1778,16 @@
                 
                 <div class="row" style="margin-top: 18px;">
                     <div class="form-group compact">
-                        <label for="taxRate">Tax Rate (%) *</label>
-                        <input type="number" id="taxRate" value="9" min="0" max="100" required>
+                        <label for="cgstRate">CGST Rate (%) *</label>
+                        <input type="number" id="cgstRate" value="9" min="0" max="100" required>
+                    </div>
+                    <div class="form-group compact">
+                        <label for="sgstRate">SGST Rate (%) *</label>
+                        <input type="number" id="sgstRate" value="9" min="0" max="100" required>
+                    </div>
+                    <div class="form-group compact">
+                        <label for="igstRate">IGST Rate (%) *</label>
+                        <input type="number" id="igstRate" value="0" min="0" max="100" required>
                     </div>
                     <div class="form-group compact">
                         <label for="roundOff">Round Off Amount</label>
@@ -2455,16 +2463,22 @@
                 renderPreviewItems();
                 
                 const taxableValue = items.reduce((sum, item) => sum + item.total, 0);
-                const taxRate = parseFloat(document.getElementById('taxRate').value) || 0;
-                const taxAmount = (taxableValue * taxRate) / 100;
+                const cgstRate = parseFloat(document.getElementById('cgstRate').value) || 0;
+                const sgstRate = parseFloat(document.getElementById('sgstRate').value) || 0;
+                const igstRate = parseFloat(document.getElementById('igstRate').value) || 0;
+                const cgstAmount = (taxableValue * cgstRate) / 100;
+                const sgstAmount = (taxableValue * sgstRate) / 100;
+                const igstAmount = (taxableValue * igstRate) / 100;
                 const roundOff = parseFloat(document.getElementById('roundOff').value) || 0;
-                const totalAmount = taxableValue + (taxAmount * 2) + roundOff;
+                const totalAmount = taxableValue + cgstAmount + sgstAmount + igstAmount + roundOff;
                 
                 document.getElementById('previewTaxable').textContent = formatCurrency(taxableValue, true);
-                document.getElementById('previewTaxRate').textContent = taxRate;
-                document.getElementById('previewSgstRate').textContent = taxRate;
-                document.getElementById('previewCgst').textContent = formatCurrency(taxAmount, true);
-                document.getElementById('previewSgst').textContent = formatCurrency(taxAmount, true);
+                document.getElementById('previewTaxRate').textContent = cgstRate;
+                document.getElementById('previewSgstRate').textContent = sgstRate;
+                document.getElementById('previewIgstRate').textContent = igstRate;
+                document.getElementById('previewCgst').textContent = formatCurrency(cgstAmount, true);
+                document.getElementById('previewSgst').textContent = formatCurrency(sgstAmount, true);
+                document.getElementById('previewIgst').textContent = formatCurrency(igstAmount, true);
                 document.getElementById('previewRoundOff').textContent = formatCurrency(roundOff, true);
                 document.getElementById('previewTotal').textContent = '₹' + formatCurrency(totalAmount, true);
                 
@@ -2519,7 +2533,9 @@
                 const deliveryAddress = document.getElementById('deliveryAddress').value;
                 const phoneNumber = document.getElementById('phoneNumber').value;
                 const notes = document.getElementById('notes').value;
-                const taxRate = parseFloat(document.getElementById('taxRate').value) || 0;
+                const cgstRate = parseFloat(document.getElementById('cgstRate').value) || 0;
+                const sgstRate = parseFloat(document.getElementById('sgstRate').value) || 0;
+                const igstRate = parseFloat(document.getElementById('igstRate').value) || 0;
                 const roundOff = parseFloat(document.getElementById('roundOff').value) || 0;
                 const paymentTerms = document.getElementById('paymentTerms').value;
                 const deliveryTerms = document.getElementById('deliveryTerms').value;
@@ -2527,8 +2543,10 @@
                 const showDeliveryTerms = document.getElementById('showDeliveryTerms').checked;
                 
                 const taxableValue = items.reduce((sum, item) => sum + item.total, 0);
-                const taxAmount = (taxableValue * taxRate) / 100;
-                const totalAmount = taxableValue + (taxAmount * 2) + roundOff;
+                const cgstAmount = (taxableValue * cgstRate) / 100;
+                const sgstAmount = (taxableValue * sgstRate) / 100;
+                const igstAmount = (taxableValue * igstRate) / 100;
+                const totalAmount = taxableValue + cgstAmount + sgstAmount + igstAmount + roundOff;
                 const amountWords = numberToWords(Math.round(totalAmount));
                 
                 let itemsHTML = '';
@@ -2823,12 +2841,16 @@
                                 <span>${formatCurrency(taxableValue, true)}</span>
                             </div>
                             <div class="print-summary-row">
-                                <span>CGST ${taxRate}%</span>
-                                <span>${formatCurrency(taxAmount, true)}</span>
+                                <span>CGST ${cgstRate}%</span>
+                                <span>${formatCurrency(cgstAmount, true)}</span>
                             </div>
                             <div class="print-summary-row">
-                                <span>SGST ${taxRate}%</span>
-                                <span>${formatCurrency(taxAmount, true)}</span>
+                                <span>SGST ${sgstRate}%</span>
+                                <span>${formatCurrency(sgstAmount, true)}</span>
+                            </div>
+                            <div class="print-summary-row">
+                                <span>IGST ${igstRate}%</span>
+                                <span>${formatCurrency(igstAmount, true)}</span>
                             </div>
                             <div class="print-summary-row">
                                 <span>Round Off</span>
@@ -3138,7 +3160,9 @@
                     document.getElementById('clientAddress').value = '';
                     document.getElementById('deliveryAddress').value = '';
                     document.getElementById('phoneNumber').value = '';
-                    document.getElementById('taxRate').value = '9';
+                    document.getElementById('cgstRate').value = '9';
+                    document.getElementById('sgstRate').value = '9';
+                    document.getElementById('igstRate').value = '0';
                     document.getElementById('roundOff').value = '0';
                     document.getElementById('notes').value = '';
                     document.getElementById('paymentTerms').value = '50% advance, 50% on delivery';
@@ -3178,7 +3202,9 @@
             document.getElementById('clientAddress').addEventListener('input', updateInvoicePreview);
             document.getElementById('deliveryAddress').addEventListener('input', updateInvoicePreview);
             document.getElementById('phoneNumber').addEventListener('input', updateInvoicePreview);
-            document.getElementById('taxRate').addEventListener('input', updateInvoicePreview);
+            document.getElementById('cgstRate').addEventListener('input', updateInvoicePreview);
+            document.getElementById('sgstRate').addEventListener('input', updateInvoicePreview);
+            document.getElementById('igstRate').addEventListener('input', updateInvoicePreview);
             document.getElementById('roundOff').addEventListener('input', updateInvoicePreview);
             document.getElementById('notes').addEventListener('input', updateInvoicePreview);
             document.getElementById('paymentTerms').addEventListener('input', updateInvoicePreview);
